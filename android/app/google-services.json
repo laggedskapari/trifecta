@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "782722853675",
+    "project_id": "trifecta-laggedskapari",
+    "storage_bucket": "trifecta-laggedskapari.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:782722853675:android:07392a9322d276cac7336e",
+        "android_client_info": {
+          "package_name": "com.laggedskapari.trifecta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPcUY9rf7M_iikUHBCcAhkST2DtBcQBNw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
