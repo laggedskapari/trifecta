@@ -1,3 +1,4 @@
+import 'package:cross_firestore/src/entities/cross_task_entity.dart';
 import 'package:equatable/equatable.dart';
 
 class CrossTask extends Equatable {
@@ -38,5 +39,38 @@ class CrossTask extends Equatable {
       completedOn: completedOn ?? this.completedOn,
     );
   }
-}
 
+  CrossTaskEntity toCrossTaskEntity() {
+    return CrossTaskEntity(
+      taskListId: taskListId,
+      taskTitle: taskTitle,
+      taskId: taskId,
+      createdOn: createdOn,
+      isCompleted: isCompleted,
+      isImportant: isImportant,
+      completedOn: completedOn,
+    );
+  }
+
+  static CrossTask fromCrossTaskEntity(CrossTaskEntity entity) {
+    return CrossTask(
+      taskId: entity.taskId,
+      taskTitle: entity.taskTitle,
+      createdOn: entity.createdOn,
+      taskListId: entity.taskListId,
+      completedOn: entity.completedOn,
+      isCompleted: entity.isCompleted,
+      isImportant: entity.isImportant,
+    );
+  }
+
+  List<Object?> get props => [
+        taskListId,
+        taskId,
+        taskTitle,
+        createdOn,
+        isImportant,
+        isCompleted,
+        completedOn,
+      ];
+}
