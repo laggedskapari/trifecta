@@ -1,14 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:trifecta_authentication/src/models/models.dart';
-import 'package:trifecta_authentication/src/models/trifecta_user_model.dart';
-import 'package:trifecta_authentication/src/trifecta_authentication_repository.dart';
 import 'package:trifecta_authentication/trifecta_authentication_repository.dart';
 
 class TrifectaAuthenticationRepositoryImplementation
     implements TrifectaAuthenticationRepository {
   final FirebaseAuth _firebaseAuth;
-  final TrifectaUserCollection =
+  final trifectaUserCollection =
       FirebaseFirestore.instance.collection('trifectaUsers');
 
   TrifectaAuthenticationRepositoryImplementation({
@@ -62,12 +59,21 @@ class TrifectaAuthenticationRepositoryImplementation
     }
   }
 
-  @override 
+  @override
   Future<void> setTrifectaUserData({required TrifectaUser trifectaUser}) async {
     try {
-
-    } catch (e) {
-      
+      await trifectaUserCollection
+          .doc(trifectaUser.trifectaFirebaseUID)
+          .set(trifectaUser.toTrifectaUserEntity().toFirebaseDocument());
+    } on FirebaseException catch (e) {
+      throw FirestoreFailure(message: e.code);
+    } catch (_) {
+      throw FirestoreFailure();
     }
+  }
+
+  @override 
+  Future<void> logOut() async {
+    await _firebaseAuth.signOut();
   }
 }

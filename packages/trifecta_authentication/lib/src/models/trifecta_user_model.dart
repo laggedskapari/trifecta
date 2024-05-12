@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:trifecta_authentication/src/entities/entities.dart';
 
 class TrifectaUser extends Equatable {
   final String trifectaFirebaseUID;
