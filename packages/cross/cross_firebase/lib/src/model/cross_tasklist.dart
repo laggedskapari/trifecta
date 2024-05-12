@@ -1,8 +1,9 @@
+import 'package:cross_firestore/src/entities/entities.dart';
 import 'package:equatable/equatable.dart';
 
 class CrossTaskList extends Equatable {
   final String taskListTitle;
-  final String createdOn;
+  final DateTime createdOn;
   final String taskListId;
 
   const CrossTaskList({
@@ -14,7 +15,7 @@ class CrossTaskList extends Equatable {
   CrossTaskList copyWith({
     String? taskListId,
     String? taskListTitle,
-    String? createdOn,
+    DateTime? createdOn,
   }) {
     return CrossTaskList(
       taskListId: taskListId ?? this.taskListId,
