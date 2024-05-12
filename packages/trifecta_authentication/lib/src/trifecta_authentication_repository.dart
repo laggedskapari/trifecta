@@ -41,6 +41,52 @@ class FirestoreFailure implements Exception {
         return const FirestoreFailure(
           message: 'Unrecoverable data loss occured',
         );
+      case 'DeadlineExceeded':
+        return const FirestoreFailure(
+          message: 'Deadline Expired.',
+        );
+      case 'FailedPrecondition':
+        return const FirestoreFailure(
+          message: 'Operation is rejected.',
+        );
+      case 'Internal':
+        return const FirestoreFailure(
+          message: 'Internal error.',
+        );
+      case 'InvalidArgument':
+        return const FirestoreFailure(
+          message: 'Invalid Argument.',
+        );
+      case 'NotFound':
+        return const FirestoreFailure(
+          message: 'Document was not found.',
+        );
+      case 'OutOfRange':
+        return const FirestoreFailure(
+          message: 'Out of valid range.',
+        );
+      case 'PermissionDenied':
+        return const FirestoreFailure(
+          message:
+              'You do not have valid authentication credential for the operation.',
+        );
+      case 'ResourceExhausted':
+        return const FirestoreFailure(
+          message: 'Resources has been exhausted.',
+        );
+      case 'Unauthenticated':
+        return const FirestoreFailure(
+          message:
+              'You do not have valid authentication credential for the operation.',
+        );
+      case 'Unavailable':
+        return const FirestoreFailure(
+          message: 'Service is currently unavailable.',
+        );
+      case 'Unimplemented':
+        return const FirestoreFailure(
+          message: 'Operation is not implemented or not supported/enabled.',
+        );
       default:
         return const FirestoreFailure();
     }
