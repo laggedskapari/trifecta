@@ -44,6 +44,8 @@ dependencies:
   firebase_auth: ^4.19.4
   firebase_performance: ^0.9.4+4
   cloud_firestore: ^4.17.2
+  log:
+    path: packages/log
   cross:
     path: packages/cross
   trifecta_authentication:
