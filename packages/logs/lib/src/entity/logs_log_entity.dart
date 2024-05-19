@@ -1,47 +1,51 @@
 class LogsLogEntity {
-  final String logTitle;
+  final String firebaseLogId;
   final String logId;
-  final String logDescription;
+  final String logTitle;
   final DateTime logCreatedOn;
   final int logDuration;
-  final double logAttendance;
-  final double logCompletion;
-  final int logSkips;
+  final double successRate;
+  final int allowedSkips;
+  final int usedSkips;
+  final bool isSuccess;
 
   const LogsLogEntity({
+    required this.firebaseLogId,
     required this.logId,
-    required this.logSkips,
-    required this.logCompletion,
-    required this.logAttendance,
     required this.logTitle,
-    required this.logDuration,
     required this.logCreatedOn,
-    required this.logDescription,
+    required this.usedSkips,
+    required this.isSuccess,
+    required this.logDuration,
+    required this.successRate,
+    required this.allowedSkips,
   });
 
-  Map<String, Object> toFirebaseDocument() {
+  Map<String, Object?> toFirestoreDocument() {
     return {
+      'firebaseLogId': firebaseLogId,
       'logId': logId,
-      'logSkips': logSkips,
-      'logCompletion': logCompletion,
-      'logAttendance': logAttendance,
       'logTitle': logTitle,
-      'logDuration': logDuration,
       'logCreatedOn': logCreatedOn,
-      'logDescription': logDescription,
+      'usedSkips': usedSkips,
+      'isSuccess': isSuccess,
+      'logDuration': logDuration,
+      'successRate': successRate,
+      'allowedSkips': allowedSkips,
     };
   }
 
-  static LogsLogEntity fromFirebaseDocument(Map<String, dynamic> doc) {
+  static LogsLogEntity fromFirestoreDocument(Map<String, dynamic> doc) {
     return LogsLogEntity(
+      firebaseLogId: doc['firebaseLogId'],
       logId: doc['logId'],
-      logDescription: doc['logDescription'],
-      logSkips: doc['logSkips'],
       logTitle: doc['logTitle'],
-      logDuration: doc['logDuration'],
       logCreatedOn: doc['logCreatedOn'],
-      logCompletion: doc['logCompletion'],
-      logAttendance: doc['logAttendance'],
+      usedSkips: doc['usedSkips'],
+      isSuccess: doc['isSuccess'],
+      logDuration: doc['logDuration'],
+      successRate: doc['successRate'],
+      allowedSkips: doc['allowedSkips'],
     );
   }
 }
