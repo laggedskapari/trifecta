@@ -1,4 +1,4 @@
-name: cross_firestore
+name: cross
 description: Module that handles cross app database services.
 publish_to: 'none'
 version: 1.0.0+1
@@ -12,6 +12,7 @@ dependencies:
   firebase_auth: ^4.17.9
   flutter:
     sdk: flutter
+  uuid: ^4.4.0
 
 dev_dependencies:
   flutter_test:
