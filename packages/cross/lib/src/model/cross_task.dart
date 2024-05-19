@@ -1,20 +1,22 @@
-import 'package:cross_firestore/src/entities/cross_task_entity.dart';
+import 'package:cross/src/entities/cross_task_entity.dart';
 import 'package:equatable/equatable.dart';
 
 class CrossTask extends Equatable {
+  final String firebaseTaskId;
   final String taskTitle;
   final String taskId;
-  final String taskListId;
+  final String firebaseTaskListId;
   final bool isCompleted;
   final bool isImportant;
   final DateTime createdOn;
   final DateTime? completedOn;
 
   const CrossTask({
+    required this.firebaseTaskId,
     required this.taskId,
     required this.taskTitle,
     required this.createdOn,
-    required this.taskListId,
+    required this.firebaseTaskListId,
     this.completedOn,
     this.isCompleted = false,
     this.isImportant = false,
@@ -22,17 +24,19 @@ class CrossTask extends Equatable {
 
   CrossTask copyWith({
     String? taskId,
+    String? firebaseTaskId,
     String? taskTitle,
     DateTime? createdOn,
     DateTime? completedOn,
     bool? isCompleted,
     bool? isImportant,
-    String? taskListId,
+    String? firebaseTaskListId,
   }) {
     return CrossTask(
+      firebaseTaskId: firebaseTaskListId ?? this.firebaseTaskId,
       taskId: taskId ?? this.taskId,
       taskTitle: taskTitle ?? this.taskTitle,
-      taskListId: taskListId ?? this.taskListId,
+      firebaseTaskListId: firebaseTaskListId ?? this.firebaseTaskListId,
       createdOn: createdOn ?? this.createdOn,
       isCompleted: isCompleted ?? this.isCompleted,
       isImportant: isImportant ?? this.isImportant,
@@ -42,8 +46,9 @@ class CrossTask extends Equatable {
 
   CrossTaskEntity toCrossTaskEntity() {
     return CrossTaskEntity(
-      taskListId: taskListId,
+      firebaseTaskListId: firebaseTaskListId,
       taskTitle: taskTitle,
+      firebaseTaskId: firebaseTaskId,
       taskId: taskId,
       createdOn: createdOn,
       isCompleted: isCompleted,
@@ -54,10 +59,11 @@ class CrossTask extends Equatable {
 
   static CrossTask fromCrossTaskEntity(CrossTaskEntity entity) {
     return CrossTask(
+      firebaseTaskId: entity.firebaseTaskId,
       taskId: entity.taskId,
       taskTitle: entity.taskTitle,
       createdOn: entity.createdOn,
-      taskListId: entity.taskListId,
+      firebaseTaskListId: entity.firebaseTaskListId,
       completedOn: entity.completedOn,
       isCompleted: entity.isCompleted,
       isImportant: entity.isImportant,
@@ -65,8 +71,9 @@ class CrossTask extends Equatable {
   }
 
   List<Object?> get props => [
-        taskListId,
+        firebaseTaskListId,
         taskId,
+        firebaseTaskId,
         taskTitle,
         createdOn,
         isImportant,
