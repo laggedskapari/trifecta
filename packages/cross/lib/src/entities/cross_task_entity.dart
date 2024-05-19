@@ -1,26 +1,29 @@
 class CrossTaskEntity {
+  final String firebaseTaskId;
   final String taskId;
   final String taskTitle;
   final bool isImportant;
   final bool isCompleted;
   final DateTime createdOn;
   final DateTime? completedOn;
-  final String taskListId;
+  final String firebaseTaskListId;
 
   const CrossTaskEntity({
+    required this.firebaseTaskId,
     required this.taskId,
     required this.taskTitle,
     required this.isCompleted,
     required this.isImportant,
     required this.createdOn,
-    required this.taskListId,
+    required this.firebaseTaskListId,
     this.completedOn,
   });
 
   Map<String, Object?> toFirestoreDocument() {
     return {
+      'firebaseTaskId': firebaseTaskId,
       'taskId': taskId,
-      'taskListId': taskListId,
+      'firebaseTaskListId': firebaseTaskListId,
       'isImportant': isImportant,
       'isCompleted': isCompleted,
       'createdOn': createdOn,
@@ -31,9 +34,10 @@ class CrossTaskEntity {
 
   static CrossTaskEntity fromFirestoreDocument(Map<String, dynamic> doc) {
     return CrossTaskEntity(
+      firebaseTaskId: doc['firebaseTaskId'],
       taskId: doc['taskId'],
       taskTitle: doc['taskTitle'],
-      taskListId: doc['taskListId'],
+      firebaseTaskListId: doc['firebaseTaskListId'],
       isCompleted: doc['isCompleted'],
       isImportant: doc['isImportant'],
       createdOn: doc['createdOn'],
