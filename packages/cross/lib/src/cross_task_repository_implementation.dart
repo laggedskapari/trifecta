@@ -45,11 +45,12 @@ class CrossTaskRepositoryImplementation implements CrossTaskRepository {
           .collection('tasks')
           .doc();
       final newTask = CrossTask(
-          firebaseTaskId: newTaskRef.id,
-          taskId: uuid.v4(),
-          taskTitle: taskTitle,
-          createdOn: DateTime.now(),
-          firebaseTaskListId: firebaseTaskListId);
+        firebaseTaskId: newTaskRef.id,
+        taskId: uuid.v4(),
+        taskTitle: taskTitle,
+        createdOn: DateTime.now(),
+        firebaseTaskListId: firebaseTaskListId,
+      );
       await newTaskRef.set(newTask.toCrossTaskEntity().toFirestoreDocument());
     } catch (e) {
       log(e.toString());
