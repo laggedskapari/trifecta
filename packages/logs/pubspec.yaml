@@ -1,4 +1,4 @@
-name: log_firebase
+name: log
 description: Module that handles logs database services.
 publish_to: 'none'
 version: 1.0.0+1
