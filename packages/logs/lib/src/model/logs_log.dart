@@ -1,56 +1,43 @@
 import 'package:equatable/equatable.dart';
+import 'package:';
 
 class LogsLog extends Equatable {
-  final String logTitle;
+  final String firebaseLogId;
   final String logId;
-  final String logDescription;
+  final String logTitle;
   final DateTime logCreatedOn;
   final int logDuration;
-  final double logAttendance;
-  final double logCompletion;
-  final int logSkips;
+  final double successRate;
+  final int allowedSkips;
+  final int usedSkips;
+  final bool isSuccess;
 
   const LogsLog({
+    required this.firebaseLogId,
     required this.logId,
     required this.logTitle,
-    required this.logDescription,
-    required this.logDuration,
     required this.logCreatedOn,
-    required this.logAttendance,
-    required this.logSkips,
-    required this.logCompletion,
+    this.usedSkips = 0,
+    this.allowedSkips = 0,
+    this.isSuccess = false,
+    required this.logDuration,
+    this.successRate = 0,
   });
 
-  LogsLog copyWith({
-    String? logTitle,
-    String? logId,
-    String? logDescription,
-    DateTime? logCreatedOn,
-    int? logDuration,
-    double? logAttendance,
-    double? logCompletion,
-    int? logSkips,
-  }) {
-    return LogsLog(
-      logId: logId ?? this.logId,
-      logTitle: logTitle ?? this.logTitle,
-      logSkips: logSkips ?? this.logSkips,
-      logDescription: logDescription ?? this.logDescription,
-      logCreatedOn: logCreatedOn ?? this.logCreatedOn,
-      logCompletion: logCompletion ?? this.logCompletion,
-      logDuration: logDuration ?? this.logDuration,
-      logAttendance: logAttendance ?? this.logAttendance,
-    );
+  LogsLogEntity toLogsLogEntity() {
+
   }
 
-  @override
+  @override 
   List<Object?> get props => [
+        firebaseLogId,
+        logId,
         logTitle,
-        logDescription,
         logCreatedOn,
+        usedSkips,
+        allowedSkips,
+        isSuccess,
         logDuration,
-        logAttendance,
-        logCompletion,
-        logSkips,
+        successRate,
       ];
 }
