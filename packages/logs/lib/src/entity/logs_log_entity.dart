@@ -8,8 +8,15 @@ class LogsLogEntity {
   final int allowedSkips;
   final int usedSkips;
   final bool isSuccess;
+  final bool isStrict;
+  final DateTime logEndDate;
+  final DateTime logCompletedOn;
+  final DateTime logInitDate;
 
   const LogsLogEntity({
+    required this.isStrict,
+    required this.logCompletedOn,
+    required this.logEndDate,
     required this.firebaseLogId,
     required this.logId,
     required this.logTitle,
@@ -19,6 +26,7 @@ class LogsLogEntity {
     required this.logDuration,
     required this.successRate,
     required this.allowedSkips,
+    required this.logInitDate,
   });
 
   Map<String, Object?> toFirestoreDocument() {
@@ -32,11 +40,19 @@ class LogsLogEntity {
       'logDuration': logDuration,
       'successRate': successRate,
       'allowedSkips': allowedSkips,
+      'isStrict': isStrict,
+      'logEndDate': logEndDate,
+      'logCompleted': logCompletedOn, 
+      'logInitDate': logInitDate,
     };
   }
 
   static LogsLogEntity fromFirestoreDocument(Map<String, dynamic> doc) {
     return LogsLogEntity(
+      logInitDate: doc['logInitDate'],
+      isStrict: doc['isStrict'],
+      logEndDate: doc['logEndDate'],
+      logCompletedOn: doc['logCompletedOn'],
       firebaseLogId: doc['firebaseLogId'],
       logId: doc['logId'],
       logTitle: doc['logTitle'],
