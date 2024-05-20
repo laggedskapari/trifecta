@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:';
+import 'package:log/src/entity/entities.dart';
 
 class LogsLog extends Equatable {
   final String firebaseLogId;
@@ -11,8 +11,15 @@ class LogsLog extends Equatable {
   final int allowedSkips;
   final int usedSkips;
   final bool isSuccess;
+  final bool isStrict;
+  final DateTime logEndDate;
+  final DateTime logCompletedOn;
+  final DateTime logInitDate;
 
   const LogsLog({
+    required this.isStrict,
+    required this.logEndDate,
+    required this.logCompletedOn,
     required this.firebaseLogId,
     required this.logId,
     required this.logTitle,
@@ -22,13 +29,46 @@ class LogsLog extends Equatable {
     this.isSuccess = false,
     required this.logDuration,
     this.successRate = 0,
+    required this.logInitDate,
   });
 
   LogsLogEntity toLogsLogEntity() {
-
+    return LogsLogEntity(
+      logInitDate: logInitDate,
+      firebaseLogId: firebaseLogId,
+      logId: logId,
+      logTitle: logTitle,
+      logCreatedOn: logCreatedOn,
+      usedSkips: usedSkips,
+      isSuccess: isSuccess,
+      logDuration: logDuration,
+      successRate: successRate,
+      allowedSkips: allowedSkips,
+      isStrict: isStrict,
+      logEndDate: logEndDate,
+      logCompletedOn: logCompletedOn,
+    );
   }
 
-  @override 
+  static LogsLog fromLogsLogEntity(LogsLogEntity entity) {
+    return LogsLog(
+      logInitDate: entity.logInitDate,
+      firebaseLogId: entity.firebaseLogId,
+      logId: entity.logId,
+      logTitle: entity.logTitle,
+      logDuration: entity.logDuration,
+      logCreatedOn: entity.logCreatedOn,
+      successRate: entity.successRate,
+      isSuccess: entity.isSuccess,
+      allowedSkips: entity.allowedSkips,
+      usedSkips: entity.usedSkips,
+      isStrict: entity.isStrict,
+      logCompletedOn: entity.logCompletedOn,
+      logEndDate: entity.logEndDate,
+    );
+  }
+
+  @override
   List<Object?> get props => [
         firebaseLogId,
         logId,
@@ -39,5 +79,9 @@ class LogsLog extends Equatable {
         isSuccess,
         logDuration,
         successRate,
+        isStrict,
+        logEndDate,
+        logCompletedOn,
+        logInitDate,
       ];
 }
