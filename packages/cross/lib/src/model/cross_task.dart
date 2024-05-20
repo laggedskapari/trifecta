@@ -22,28 +22,6 @@ class CrossTask extends Equatable {
     this.isImportant = false,
   });
 
-  CrossTask copyWith({
-    String? taskId,
-    String? firebaseTaskId,
-    String? taskTitle,
-    DateTime? createdOn,
-    DateTime? completedOn,
-    bool? isCompleted,
-    bool? isImportant,
-    String? firebaseTaskListId,
-  }) {
-    return CrossTask(
-      firebaseTaskId: firebaseTaskListId ?? this.firebaseTaskId,
-      taskId: taskId ?? this.taskId,
-      taskTitle: taskTitle ?? this.taskTitle,
-      firebaseTaskListId: firebaseTaskListId ?? this.firebaseTaskListId,
-      createdOn: createdOn ?? this.createdOn,
-      isCompleted: isCompleted ?? this.isCompleted,
-      isImportant: isImportant ?? this.isImportant,
-      completedOn: completedOn ?? this.completedOn,
-    );
-  }
-
   CrossTaskEntity toCrossTaskEntity() {
     return CrossTaskEntity(
       firebaseTaskListId: firebaseTaskListId,
