@@ -8,24 +8,18 @@ class LogsLog extends Equatable {
   final DateTime logCreatedOn;
   final int logDuration;
   final double successRate;
-  final int allowedSkips;
-  final int usedSkips;
   final bool isSuccess;
-  final bool isStrict;
   final DateTime logEndDate;
   final DateTime logCompletedOn;
   final DateTime logInitDate;
 
   const LogsLog({
-    required this.isStrict,
     required this.logEndDate,
     required this.logCompletedOn,
     required this.firebaseLogId,
     required this.logId,
     required this.logTitle,
     required this.logCreatedOn,
-    this.usedSkips = 0,
-    this.allowedSkips = 0,
     this.isSuccess = false,
     required this.logDuration,
     this.successRate = 0,
@@ -39,12 +33,9 @@ class LogsLog extends Equatable {
       logId: logId,
       logTitle: logTitle,
       logCreatedOn: logCreatedOn,
-      usedSkips: usedSkips,
       isSuccess: isSuccess,
       logDuration: logDuration,
       successRate: successRate,
-      allowedSkips: allowedSkips,
-      isStrict: isStrict,
       logEndDate: logEndDate,
       logCompletedOn: logCompletedOn,
     );
@@ -60,9 +51,6 @@ class LogsLog extends Equatable {
       logCreatedOn: entity.logCreatedOn,
       successRate: entity.successRate,
       isSuccess: entity.isSuccess,
-      allowedSkips: entity.allowedSkips,
-      usedSkips: entity.usedSkips,
-      isStrict: entity.isStrict,
       logCompletedOn: entity.logCompletedOn,
       logEndDate: entity.logEndDate,
     );
@@ -74,12 +62,9 @@ class LogsLog extends Equatable {
         logId,
         logTitle,
         logCreatedOn,
-        usedSkips,
-        allowedSkips,
         isSuccess,
         logDuration,
         successRate,
-        isStrict,
         logEndDate,
         logCompletedOn,
         logInitDate,
