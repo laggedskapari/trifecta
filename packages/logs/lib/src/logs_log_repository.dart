@@ -5,8 +5,6 @@ abstract class LogsLogRepository {
   Future<void> createNewLogsLog({
     required String logTitle,
     required int logDuration,
-    required int allowedSkips,
-    required bool isStrict,
   });
   Future<void> deleteLogsLog({
     required String firebaseLogId,
@@ -19,7 +17,7 @@ abstract class LogsLogRepository {
   Future<void> updateLogsLogSuccess({required String firebaseLogId});
   Future<void> updateSuccessRate({
     required String firebaseLogId,
-    required double duccessRate,
+    required double successRate,
   });
   Future<void> decreaseLogsLogSkipsCount({required String firebaseLogId});
 }
