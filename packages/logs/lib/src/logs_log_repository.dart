@@ -13,11 +13,14 @@ abstract class LogsLogRepository {
     required String logTitle,
     required int logDuration,
     required DateTime logInitDate,
+    required String firebaseLogId,
   });
-  Future<void> updateLogsLogSuccess({required String firebaseLogId});
+  Future<void> updateLogsLogSuccess({
+    required String firebaseLogId,
+    required bool isSuccess,
+  });
   Future<void> updateSuccessRate({
     required String firebaseLogId,
     required double successRate,
   });
-  Future<void> decreaseLogsLogSkipsCount({required String firebaseLogId});
 }

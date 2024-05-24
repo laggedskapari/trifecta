@@ -60,10 +60,74 @@ class LogsLogRepositoryImplementation implements LogsLogRepository {
     }
   }
 
-  @override 
-  Future<void> deleteLogsLog({required String firebaseLogId,}) async {
+  @override
+  Future<void> deleteLogsLog({
+    required String firebaseLogId,
+  }) async {
     try {
-      await _trifectaUserReference.doc(_firebaseAuth.currentUser!.uid).collection('logs').doc(firebaseLogId).delete();
+      await _trifectaUserReference
+          .doc(_firebaseAuth.currentUser!.uid)
+          .collection('logs')
+          .doc(firebaseLogId)
+          .delete();
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  @override
+  Future<void> updateLogsLog({
+    required String logTitle,
+    required int logDuration,
+    required DateTime logInitDate,
+    required String firebaseLogId,
+  }) async {
+    try {
+      await _trifectaUserReference
+          .doc(_firebaseAuth.currentUser!.uid)
+          .collection('logs')
+          .doc(firebaseLogId)
+          .update({
+        'logTitle': logTitle,
+        'logDuration': logDuration,
+        'logInitDate': logInitDate,
+      });
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  @override
+  Future<void> updateLogsLogSuccess({
+    required String firebaseLogId,
+    required bool isSuccess,
+  }) async {
+    try {
+      await _trifectaUserReference
+          .doc(_firebaseAuth.currentUser!.uid)
+          .collection('logs')
+          .doc(firebaseLogId)
+          .update({
+        'isSuccess': isSuccess,
+      });
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  @override
+  Future<void> updateSuccessRate({
+    required String firebaseLogId,
+    required double successRate,
+  }) async {
+    try {
+      await _trifectaUserReference
+          .doc(_firebaseAuth.currentUser!.uid)
+          .collection('logs')
+          .doc(firebaseLogId)
+          .update({
+        'successRate': successRate,
+      });
     } catch (e) {
       log(e.toString());
     }
