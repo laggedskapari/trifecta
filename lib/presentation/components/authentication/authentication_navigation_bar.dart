@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class AuthenticationNavigationBar extends StatefulWidget {
-  const AuthenticationNavigationBar(
-      {super.key, required this.changeAuthenticationScreen});
+  const AuthenticationNavigationBar({
+    super.key,
+    required this.changeAuthenticationScreen,
+  });
 
   final void Function(int index) changeAuthenticationScreen;
 
@@ -17,7 +19,6 @@ class _AuthenticationNavigationBarState
 
   @override
   Widget build(BuildContext context) {
-
     List<String> authenticationScreen = ['SIGNUP', 'SIGNIN'];
     double displayWidth = MediaQuery.of(context).size.width;
     double displayHeight = MediaQuery.of(context).size.height;
