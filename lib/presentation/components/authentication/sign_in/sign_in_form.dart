@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:trifecta/presentation/components/authentication/trifecta_form_text_field.dart';
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+class SignInForm extends StatefulWidget {
+  const SignInForm({super.key});
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  State<SignInForm> createState() => _SignInFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _SignInFormState extends State<SignInForm> {
   final _loginFormKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passkeyController = TextEditingController();
