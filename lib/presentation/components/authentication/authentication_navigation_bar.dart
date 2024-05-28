@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AuthenticationNavigationBar extends StatefulWidget {
   const AuthenticationNavigationBar({
@@ -15,7 +18,7 @@ class AuthenticationNavigationBar extends StatefulWidget {
 
 class _AuthenticationNavigationBarState
     extends State<AuthenticationNavigationBar> {
-  int currentIndex = 1;
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -28,19 +31,29 @@ class _AuthenticationNavigationBarState
       height: displayHeight * .10,
       width: displayWidth * .05,
       child: ListView.builder(
+        scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) => InkWell(
-          onTap: () {},
+          onTap: () {
+            setState(() {
+              currentIndex = index;
+              widget.changeAuthenticationScreen(currentIndex);
+              HapticFeedback.heavyImpact();
+            });
+          },
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
-          child: Text(
-            authenticationScreen[index],
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight:
-                  index == currentIndex ? FontWeight.w900 : FontWeight.normal,
-              color: index == currentIndex
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.secondary,
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Text(
+              authenticationScreen[index],
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight:
+                    index == currentIndex ? FontWeight.w900 : FontWeight.normal,
+                color: index == currentIndex
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.secondary,
+              ),
             ),
           ),
         ),
