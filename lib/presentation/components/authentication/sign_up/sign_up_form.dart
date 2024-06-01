@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trifecta/bloc/SignUpBloc/sign_up_bloc.dart';
 import 'package:trifecta/presentation/components/authentication/password_strength_check.dart';
 import 'package:trifecta/presentation/components/authentication/trifecta_form_text_field.dart';
 import 'package:trifecta_authentication/trifecta_authentication_repository.dart';
@@ -21,6 +23,34 @@ class _SignUpFormState extends State<SignUpForm> {
   IconData iconPassword = CupertinoIcons.eye_fill;
   bool _obsecurePassword = true;
   bool _isPasskeySecure = false;
+  bool _isError = false;
+
+  void proceedSignUp() {
+    if (_isPasskeySecure && _signUpFormKey.currentState!.validate()) {
+      TrifectaUser newUser = TrifectaUser.emptyTrifectaUser;
+      newUser = newUser.copyWith(
+        username: _usernameController.text,
+        emailAddress: _emailController.text,
+      );
+      context.read<SignUpBloc>().add(
+            SignUpRequired(
+              newUser: newUser,
+              passkey: _passkeyController.text.trim(),
+            ),
+          );
+      HapticFeedback.heavyImpact();
+    } else {
+      HapticFeedback.vibrate();
+      Future.delayed(const Duration(seconds: 3), () {
+        setState(() {
+          _isError = false;
+        });
+      });
+      setState(() {
+        _isError = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +156,23 @@ class _SignUpFormState extends State<SignUpForm> {
                 ),
               ),
             ),
+            Visibility(
+              visible: _isError,
+              child: Container(
+                margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                alignment: Alignment.center,
+                width: deviceWidth * .8,
+                child: const Text(
+                  '//FORM DATA IS INVALID OR EMPTY',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.red,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: 'JetBrainsMono',
+                  ),
+                ),
+              ),
+            ),
             SizedBox(
               width: deviceWidth * 0.8,
               child: TextButton(
@@ -133,16 +180,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   overlayColor: WidgetStateColor.resolveWith(
                       (states) => Colors.transparent),
                 ),
-                onPressed: () {
-                  if (_isPasskeySecure && _signUpFormKey.currentState!.validate()) {
-                    TrifectaUser newUser = TrifectaUser.emptyTrifectaUser;
-                    newUser = newUser.copyWith(
-                      username: _usernameController.text,
-                      emailAddress: _emailController.text,
-                    );
-                    HapticFeedback.heavyImpact();
-                  }
-                },
+                onPressed: proceedSignUp,
                 child: const Text(
                   '[PROCEED]',
                   style: TextStyle(
