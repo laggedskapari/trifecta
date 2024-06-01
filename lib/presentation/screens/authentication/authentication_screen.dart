@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trifecta/bloc/SignInBloc/sign_in_bloc.dart';
-import 'package:trifecta/bloc/SignUpBloc/sign_up_bloc.dart';
-import 'package:trifecta/bloc/TrifectaAuthenticationBloc/trifecta_authentication_bloc.dart';
+import 'package:trifecta/bloc/Authentication/SignInBloc/sign_in_bloc.dart';
+import 'package:trifecta/bloc/Authentication/SignUpBloc/sign_up_bloc.dart';
+import 'package:trifecta/bloc/Authentication/TrifectaAuthenticationBloc/trifecta_authentication_bloc.dart';
 import 'package:trifecta/presentation/components/authentication/authentication_navigation_bar.dart';
 import 'package:trifecta/presentation/components/authentication/sign_up/sign_up_form.dart';
 import 'package:trifecta/presentation/components/authentication/sign_in/sign_in_form.dart';

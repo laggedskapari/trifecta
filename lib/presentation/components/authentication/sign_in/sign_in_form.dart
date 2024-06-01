@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trifecta/bloc/SignInBloc/sign_in_bloc.dart';
+import 'package:trifecta/bloc/Authentication/SignInBloc/sign_in_bloc.dart';
 import 'package:trifecta/presentation/components/authentication/trifecta_form_text_field.dart';
 
 class SignInForm extends StatefulWidget {

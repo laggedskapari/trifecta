@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trifecta/bloc/SignUpBloc/sign_up_bloc.dart';
+import 'package:trifecta/bloc/Authentication/SignUpBloc/sign_up_bloc.dart';
 import 'package:trifecta/presentation/components/authentication/password_strength_check.dart';
 import 'package:trifecta/presentation/components/authentication/trifecta_form_text_field.dart';
 import 'package:trifecta_authentication/trifecta_authentication_repository.dart';
