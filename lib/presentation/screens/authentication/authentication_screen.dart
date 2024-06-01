@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trifecta/bloc/SignUpBloc/sign_up_bloc.dart';
+import 'package:trifecta/bloc/TrifectaAuthenticationBloc/trifecta_authentication_bloc.dart';
 import 'package:trifecta/presentation/components/authentication/authentication_navigation_bar.dart';
 import 'package:trifecta/presentation/components/authentication/sign_up/sign_up_form.dart';
 import 'package:trifecta/presentation/components/authentication/sign_in/sign_in_form.dart';
@@ -24,10 +27,27 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const TrifectaAppBar(),
-      body: <Widget>[
-        const SignUpForm(),
-        const SignInForm(),
-      ][authenticationWidgetScreen],
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => SignUpBloc(
+              trifectaAuthenticationRepository: context
+                  .read<TrifectaAuthenticationBloc>()
+                  .trifectaAuthenticationRepository,
+            ),
+          ),
+          BlocProvider(
+            create: (context) => SignUpBloc(
+                trifectaAuthenticationRepository: context
+                    .read<TrifectaAuthenticationBloc>()
+                    .trifectaAuthenticationRepository),
+          ),
+        ],
+        child: <Widget>[
+          const SignUpForm(),
+          const SignInForm(),
+        ][authenticationWidgetScreen],
+      ),
       bottomNavigationBar: AuthenticationNavigationBar(
         changeAuthenticationScreen: changeAuthenticationWidget,
       ),
