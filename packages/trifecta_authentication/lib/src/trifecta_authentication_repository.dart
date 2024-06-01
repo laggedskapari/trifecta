@@ -26,7 +26,7 @@ class FirestoreFailure implements Exception {
   factory FirestoreFailure.fromCode(String code) {
     switch (code) {
       case 'Aborted':
-        return FirestoreFailure(
+        return const FirestoreFailure(
           message: 'Operation was aborted.',
         );
       case 'AlreadyExists':
