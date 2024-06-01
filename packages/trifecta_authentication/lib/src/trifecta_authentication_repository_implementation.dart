@@ -43,7 +43,7 @@ class TrifectaAuthenticationRepositoryImplementation
   }) async {
     try {
       UserCredential newTrifectaCredential =
-          await _firebaseAuth.signInWithEmailAndPassword(
+          await _firebaseAuth.createUserWithEmailAndPassword(
         email: trifectaUser.emailAddress,
         password: passkey,
       );
@@ -53,9 +53,9 @@ class TrifectaAuthenticationRepositoryImplementation
       );
       return trifectaUser;
     } on FirebaseAuthException catch (e) {
-      throw SignInWithEmailAndPasswordFailure(message: e.code);
+      throw SignUpWithEmailAndPasswordFailure(message: e.code);
     } catch (_) {
-      throw const SignInWithEmailAndPasswordFailure();
+      throw const SignUpWithEmailAndPasswordFailure();
     }
   }
 
@@ -68,7 +68,7 @@ class TrifectaAuthenticationRepositoryImplementation
     } on FirebaseException catch (e) {
       throw FirestoreFailure(message: e.code);
     } catch (_) {
-      throw FirestoreFailure();
+      throw const FirestoreFailure();
     }
   }
 
