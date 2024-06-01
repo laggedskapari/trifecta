@@ -35,7 +35,7 @@ class Trifecta extends StatelessWidget {
                 providers: [
                   BlocProvider<SignInBloc>(
                     create: (context) => SignInBloc(
-                      trifectaAutheticationRepository: context
+                      trifectaAuthenticationRepository: context
                           .read<TrifectaAuthenticationBloc>()
                           .trifectaAuthenticationRepository,
                     ),
