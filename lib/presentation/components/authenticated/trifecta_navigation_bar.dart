@@ -42,15 +42,13 @@ class _TrifectaNavigationBar extends State<TrifectaNavigationBar> {
               screens[index],
               style: TextStyle(
                 fontSize: 18,
-                fontWeight:
-                    index == currentIndex ? FontWeight.w900 : FontWeight.normal,
-                color: index == currentIndex
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.secondary,
+                fontWeight: index == currentIndex ? FontWeight.w900 : FontWeight.normal,
+                color: index == currentIndex ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary,
               ),
             ),
           ),
         ),
+        scrollDirection: Axis.horizontal,
         shrinkWrap: true,
         itemCount: screens.length,
       ),
