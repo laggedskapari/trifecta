@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trifecta/bloc/SignInBloc/sign_in_bloc.dart';
 import 'package:trifecta/presentation/components/authentication/trifecta_form_text_field.dart';
 
 class SignInForm extends StatefulWidget {
@@ -10,12 +12,24 @@ class SignInForm extends StatefulWidget {
 }
 
 class _SignInFormState extends State<SignInForm> {
+
   final _loginFormKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passkeyController = TextEditingController();
   bool _obsecurePasskey = true;
   IconData iconPassword = CupertinoIcons.eye_fill;
-  String? _errorMessage;
+
+  void proceedSignIn() {
+    if (_emailController.text.trim().isNotEmpty &&
+        _passkeyController.text.trim().isNotEmpty) {
+      context.read<SignInBloc>().add(
+            SignInRequired(
+              emailAddress: _emailController.text.trim(),
+              passkey: _passkeyController.text.trim(),
+            ),
+          );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +51,11 @@ class _SignInFormState extends State<SignInForm> {
                 hintText: 'email...',
                 obsecureText: false,
                 textInputType: TextInputType.emailAddress,
-                errorMessage: _errorMessage,
                 validator: (value) {
-                  if (value!.isEmpty) {
-                    _errorMessage = '//NO EMAIL FOUND!';
-                  } else if (!RegExp(r'^[\w-\.]+@([\w-]+.)+[\w-]{2,4}$')
-                      .hasMatch(value)) {
-                    _errorMessage = '//EMAIL NOT VALID!';
+                  if (!RegExp(
+                          r'^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$')
+                      .hasMatch(value!)) {
+                    return '//EMAIL NOT VALID!';
                   }
                   return null;
                 },
@@ -74,14 +86,17 @@ class _SignInFormState extends State<SignInForm> {
             SizedBox(
               width: deviceWidth * 0.8,
               child: TextButton(
-                onPressed: () {},
-                child: const Text(
+                onPressed: proceedSignIn,
+                child: Text(
                   '[PROCEED]',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
                     fontFamily: 'JetBrainsMono',
-                    color: true ? Colors.green : Colors.grey,
+                    color: _emailController.text != '' &&
+                            _passkeyController.text != ''
+                        ? Colors.green
+                        : Colors.grey,
                   ),
                 ),
               ),
