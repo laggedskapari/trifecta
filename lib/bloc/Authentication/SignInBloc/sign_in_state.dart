@@ -2,7 +2,7 @@ part of 'sign_in_bloc.dart';
 
 enum SignInStatus { intial, success, failure, processing }
 
-class SignInState extends Equatable {
+final class SignInState extends Equatable {
   final SignInStatus status;
   final String? message;
 

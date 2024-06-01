@@ -2,7 +2,7 @@ part of 'trifecta_authentication_bloc.dart';
 
 enum TrifectaAuthenticationStatus { authenticated, unauthenticated, unknown }
 
-class TrifectaAuthenticationState extends Equatable {
+final class TrifectaAuthenticationState extends Equatable {
   final TrifectaAuthenticationStatus status;
   final User? currentTrifectaUser;
 
