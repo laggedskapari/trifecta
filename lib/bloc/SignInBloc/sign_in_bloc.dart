@@ -10,8 +10,8 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   final TrifectaAuthenticationRepository _trifectaAuthenticationRepository;
 
   SignInBloc({
-    required TrifectaAuthenticationRepository trifectaAutheticationRepository,
-  })  : _trifectaAuthenticationRepository = trifectaAutheticationRepository,
+    required TrifectaAuthenticationRepository trifectaAuthenticationRepository,
+  })  : _trifectaAuthenticationRepository = trifectaAuthenticationRepository,
         super(const SignInState.initial()) {
     on<SignInRequired>((event, emit) async {
       emit(const SignInState.processing());
