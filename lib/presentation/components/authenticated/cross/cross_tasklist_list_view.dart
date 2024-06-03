@@ -19,8 +19,9 @@ class _CrossTasklistListViewState extends State<CrossTasklistListView> {
 
   @override
   Widget build(BuildContext context) {
-    double displayWidth = MediaQuery.of(context).size.width;
-    double displayHeight = MediaQuery.of(context).size.height;
+
+    double deviceWidth = MediaQuery.of(context).size.width;
+    double deviceHeight = MediaQuery.of(context).size.height;
 
     return BlocBuilder<TaskListBloc, TaskListState>(
       builder: (context, state) {
@@ -35,12 +36,13 @@ class _CrossTasklistListViewState extends State<CrossTasklistListView> {
         }
         if (state.status == TaskListStatus.success) {
           return Container(
+          height: deviceHeight * .10,
             alignment: Alignment.center,
-            margin: EdgeInsets.symmetric(horizontal: displayWidth * .10),
+            margin: EdgeInsets.symmetric(horizontal: deviceWidth * .10),
             child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemCount: 5,
+              itemCount: state.crossTaskLists.length,
               itemBuilder: (context, index) => InkWell(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
@@ -76,9 +78,9 @@ class _CrossTasklistListViewState extends State<CrossTasklistListView> {
         return LoadingIndicator(
           indicatorType: Indicator.ballClipRotatePulse,
           colors: [
-            Theme.of(context).colorScheme.secondary,
+            Theme.of(context).colorScheme.primary,
           ],
-          strokeWidth: 5,
+          strokeWidth: 10,
         );
       },
     );
