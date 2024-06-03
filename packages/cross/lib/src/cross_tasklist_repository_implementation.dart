@@ -10,7 +10,7 @@ import 'package:uuid/uuid.dart';
 class CrossTasklistRepositoryImplementation implements CrossTaskListRepository {
   final FirebaseAuth _firebaseAuth;
   final CollectionReference _trifectaUserReference =
-      FirebaseFirestore.instance.collection('trifectaUser');
+      FirebaseFirestore.instance.collection('trifectaUsers');
 
   CrossTasklistRepositoryImplementation({FirebaseAuth? firebaseAuth})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
