@@ -8,6 +8,7 @@ part 'tasklist_state.dart';
 part 'tasklist_event.dart';
 
 class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
+
   final CrossTaskListRepository crossTaskListRepository;
 
   TaskListBloc({required this.crossTaskListRepository})
@@ -43,7 +44,8 @@ class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
     });
     on<DeleteTaskListEvent>((event, emit) async {
       try {
-        await crossTaskListRepository.deleteTaskList(firebaseTaskListId: event.taskListFirebaseId);
+        await crossTaskListRepository.deleteTaskList(
+            firebaseTaskListId: event.taskListFirebaseId);
         add(LoadTaskListsEvent());
       } catch (e) {
         log(e.toString());
