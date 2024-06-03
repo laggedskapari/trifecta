@@ -25,7 +25,7 @@ class CrossTaskListEntity {
       firebaseTaskListId: doc['firebaseTaskListId'],
       taskListId: doc['taskListId'],
       taskListTitle: doc['taskListTitle'],
-      createdOn: doc['createdOn'],
+      createdOn: doc['createdOn'].toDate(),
     );
   }
 }
