@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trifecta/bloc/Cross/TaskListBloc/tasklist_bloc.dart';
@@ -39,11 +37,13 @@ class _NewTaskListFormState extends State<NewTaskListForm> {
             color: Theme.of(context).colorScheme.primary,
             size: 20,
           ),
-          TrifectaFormTextField(
-            textInputType: TextInputType.text,
-            textEditingController: _titleController,
-            hintText: '//Title...',
-            obsecureText: false,
+          Expanded(
+            child: TrifectaFormTextField(
+              textInputType: TextInputType.text,
+              textEditingController: _titleController,
+              hintText: '//Title...',
+              obsecureText: false,
+            ),
           ),
           IconButton(
             onPressed: submitNewTaskList,
