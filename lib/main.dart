@@ -1,3 +1,4 @@
+import 'package:cross/cross_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:trifecta/trifecta.dart';
@@ -9,6 +10,8 @@ void main() async {
   runApp(
     Trifecta(
       trifectaAuthenticationRepository: TrifectaAuthenticationRepositoryImplementation(),
+      crossTaskListRepository: CrossTasklistRepositoryImplementation(),
+      crossTaskRepository: CrossTaskRepositoryImplementation(),
     ),
   );
 }
