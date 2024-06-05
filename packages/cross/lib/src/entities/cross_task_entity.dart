@@ -40,7 +40,7 @@ class CrossTaskEntity {
       firebaseTaskListId: doc['firebaseTaskListId'],
       isCompleted: doc['isCompleted'],
       isImportant: doc['isImportant'],
-      createdOn: doc['createdOn'],
+      createdOn: doc['createdOn'].toDate(),
       completedOn: doc['completedOn'],
     );
   }
