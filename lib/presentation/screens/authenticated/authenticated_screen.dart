@@ -1,14 +1,9 @@
 import 'package:cross/cross_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trifecta/bloc/Authentication/SignInBloc/sign_in_bloc.dart';
 import 'package:trifecta/bloc/Cross/TaskBloc/task_bloc.dart';
 import 'package:trifecta/bloc/Cross/TaskListBloc/tasklist_bloc.dart';
 import 'package:trifecta/presentation/components/authenticated/cross/cross_page.dart';
-import 'package:trifecta/presentation/components/authenticated/cross/cross_tasklist_list_view.dart';
-import 'package:trifecta/presentation/components/authenticated/cross/cross_tasks_list_view.dart';
-import 'package:trifecta/presentation/components/authenticated/cross/new_task_form.dart';
-import 'package:trifecta/presentation/components/authenticated/cross/new_tasklist_form.dart';
 import 'package:trifecta/presentation/components/authenticated/trifecta_navigation_bar.dart';
 import 'package:trifecta/presentation/components/trifecta_app_bar.dart';
 
