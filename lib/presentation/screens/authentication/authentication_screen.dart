@@ -44,7 +44,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                   .trifectaAuthenticationRepository,
             ),
           ),
-        ],
+       ],
         child: <Widget>[
           const SignUpForm(),
           const SignInForm(),
