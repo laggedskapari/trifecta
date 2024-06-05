@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:trifecta/bloc/Cross/TaskBloc/task_bloc.dart';
+import 'package:trifecta/presentation/components/authenticated/cross/new_task_form.dart';
 
 class CrossTasksListView extends StatelessWidget {
   const CrossTasksListView({
     super.key,
+    required this.firebaseTaskListId,
   });
+
+  final String firebaseTaskListId;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +19,9 @@ class CrossTasksListView extends StatelessWidget {
 
     return Container(
       height: deviceHeight * .70,
-      margin: EdgeInsets.symmetric(horizontal: deviceWidth * .10),
+      margin: EdgeInsets.symmetric(
+        horizontal: deviceWidth * .05,
+      ),
       alignment: Alignment.centerLeft,
       child: BlocBuilder<TaskBloc, TaskState>(
         builder: (context, state) {
@@ -29,11 +35,20 @@ class CrossTasksListView extends StatelessWidget {
             );
           }
           if (state.status == TaskStatus.success) {
-            return ListView.builder(
-              itemBuilder: (context, index) => Text(
-                state.crossTasks[index].taskTitle,
-              ),
-              itemCount: state.crossTasks.length,
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemBuilder: (context, index) => Text(
+                      state.crossTasks[index].taskTitle,
+                    ),
+                    itemCount: state.crossTasks.length,
+                  ),
+                ),
+                NewTaskForm(
+                  firebaseTaskListId: firebaseTaskListId,
+                ),
+              ],
             );
           }
           if (state.status == TaskStatus.failure) {
