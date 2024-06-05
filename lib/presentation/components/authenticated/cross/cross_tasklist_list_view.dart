@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:trifecta/bloc/Cross/TaskBloc/task_bloc.dart';
 import 'package:trifecta/bloc/Cross/TaskListBloc/tasklist_bloc.dart';
 
-class CrossTasklistListView extends StatefulWidget {
-  const CrossTasklistListView({super.key});
+class CrossTaskListListView extends StatefulWidget {
+  const CrossTaskListListView({
+    super.key,
+    required this.loadTaskList,
+  });
+
+  final void Function(String firebaseTaskListId) loadTaskList;
 
   @override
-  State<CrossTasklistListView> createState() => _CrossTasklistListViewState();
+  State<CrossTaskListListView> createState() => _CrossTaskListListViewState();
 }
 
-class _CrossTasklistListViewState extends State<CrossTasklistListView> {
+class _CrossTaskListListViewState extends State<CrossTaskListListView> {
   int currentTaskListIndex = -1;
   void changeTaskList({required int taskListIndex}) {
     taskListIndex = currentTaskListIndex;
@@ -19,7 +25,6 @@ class _CrossTasklistListViewState extends State<CrossTasklistListView> {
 
   @override
   Widget build(BuildContext context) {
-
     double deviceWidth = MediaQuery.of(context).size.width;
     double deviceHeight = MediaQuery.of(context).size.height;
 
@@ -36,9 +41,9 @@ class _CrossTasklistListViewState extends State<CrossTasklistListView> {
         }
         if (state.status == TaskListStatus.success) {
           return Container(
-          height: deviceHeight * .10,
+            height: deviceHeight * .10,
             alignment: Alignment.center,
-            margin: EdgeInsets.symmetric(horizontal: deviceWidth * .10),
+            margin: EdgeInsets.symmetric(horizontal: deviceWidth * .01,),
             child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
@@ -49,20 +54,29 @@ class _CrossTasklistListViewState extends State<CrossTasklistListView> {
                 onTap: () {
                   setState(() {
                     changeTaskList(taskListIndex: index);
+                    BlocProvider.of<TaskBloc>(context).add(
+                      LoadTasksEvent(
+                        firebaseTaskListId:
+                            state.crossTaskLists[index].firebaseTaskListId,
+                      ),
+                    );
                     currentTaskListIndex = index;
                     HapticFeedback.heavyImpact();
                   });
                 },
-                child: Text(
-                  '[${state.crossTaskLists[index].taskListTitle.toUpperCase()}]',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: index == currentTaskListIndex
-                        ? FontWeight.w900
-                        : FontWeight.normal,
-                    color: index == currentTaskListIndex
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.secondary,
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Text(
+                    '[${state.crossTaskLists[index].taskListTitle.toUpperCase()}]',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: index == currentTaskListIndex
+                          ? FontWeight.w900
+                          : FontWeight.normal,
+                      color: index == currentTaskListIndex
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                 ),
               ),
