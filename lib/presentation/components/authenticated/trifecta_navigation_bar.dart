@@ -21,7 +21,7 @@ class _TrifectaNavigationBar extends State<TrifectaNavigationBar> {
 
     return Container(
       alignment: Alignment.center,
-      height: displayHeight * .10,
+      height: displayHeight * .07,
       margin: EdgeInsets.symmetric(
         horizontal: displayWidth * .05,
       ),
