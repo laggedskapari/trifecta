@@ -6,10 +6,12 @@ final class TaskState extends Equatable {
   final TaskStatus status;
   final String? errorMessage;
   final List<CrossTask> crossTasks;
+  final String firebaseTaskListId;
 
   const TaskState._({
     this.status = TaskStatus.initial,
     this.crossTasks = const [],
+    this.firebaseTaskListId = '',
     this.errorMessage,
   });
 
@@ -19,7 +21,8 @@ final class TaskState extends Equatable {
 
   const TaskState.success({
     required List<CrossTask> crossTasks,
-  }) : this._(status: TaskStatus.success, crossTasks: crossTasks);
+    required String firebaseTaskListId,
+  }) : this._(status: TaskStatus.success, crossTasks: crossTasks, firebaseTaskListId: firebaseTaskListId);
 
   const TaskState.failure({
     required String errorMessage,

@@ -16,9 +16,14 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
       try {
         emit(const TaskState.processing());
         final crossTasks = await crossTaskRepository
-            .getAllTasks(firebaseTaskListId: event.firebaseTaskListId)
+            .getAllTasks(
+              firebaseTaskListId: event.firebaseTaskListId,
+            )
             .first;
-        emit(TaskState.success(crossTasks: crossTasks));
+        emit(TaskState.success(
+          crossTasks: crossTasks,
+          firebaseTaskListId: event.firebaseTaskListId,
+        ));
       } catch (e) {
         emit(TaskState.failure(errorMessage: e.toString()));
       }
@@ -27,8 +32,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<CreateNewTaskEvent>((event, emit) async {
       try {
         await crossTaskRepository.createNewCrossTask(
-            firebaseTaskListId: event.firebaseTaskListId,
-            taskTitle: event.taskTitle);
+          firebaseTaskListId: event.firebaseTaskListId,
+          taskTitle: event.taskTitle,
+        );
         add(LoadTasksEvent(firebaseTaskListId: event.firebaseTaskListId));
       } catch (e) {
         log(e.toString());
@@ -53,6 +59,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
           firebaseTaskId: event.firebaseTaskId,
           isCompleted: event.taskCompletionStatus,
         );
+        add(LoadTasksEvent(firebaseTaskListId: event.firebaseTaskListId));
       } catch (e) {
         log(e.toString());
       }
