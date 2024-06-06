@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trifecta/bloc/Cross/TaskBloc/task_bloc.dart';
-import 'package:trifecta/presentation/components/authentication/trifecta_form_text_field.dart';
 
 class NewTaskForm extends StatefulWidget {
   const NewTaskForm({
@@ -18,17 +18,29 @@ class NewTaskForm extends StatefulWidget {
 class _NewTaskFormState extends State<NewTaskForm> {
   final _titleController = TextEditingController();
 
+  void submitNewTask() {
+    if (_titleController.text.trim().isNotEmpty) {
+      context.read<TaskBloc>().add(CreateNewTaskEvent(
+          taskTitle: _titleController.text.trim(),
+          firebaseTaskListId: widget.firebaseTaskListId));
+          HapticFeedback.heavyImpact();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 52,
+      height: 51,
       alignment: Alignment.center,
       child: Row(
         children: [
-          Icon(
-            Icons.double_arrow_rounded,
-            color: Theme.of(context).colorScheme.primary,
-            size: 20,
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Icon(
+              Icons.double_arrow_rounded,
+              color: Theme.of(context).colorScheme.primary,
+              size: 20,
+            ),
           ),
           Expanded(
             child: Center(
@@ -47,19 +59,15 @@ class _NewTaskFormState extends State<NewTaskForm> {
               ),
             ),
           ),
-          IconButton(
-            onPressed: () {
-              context.read<TaskBloc>().add(
-                    CreateNewTaskEvent(
-                      taskTitle: _titleController.text.trim(),
-                      firebaseTaskListId: widget.firebaseTaskListId,
-                    ),
-                  );
-            },
-            icon: Icon(
-              Icons.check_rounded,
-              size: 20,
-              color: Theme.of(context).colorScheme.primary,
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: IconButton(
+              onPressed: submitNewTask,
+              icon: Icon(
+                Icons.add_task_rounded,
+                size: 20,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
           )
         ],
