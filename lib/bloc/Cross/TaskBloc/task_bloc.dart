@@ -70,6 +70,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
           firebaseTaskListId: event.firebaseTaskListId,
           firebaseTaskId: event.firebaseTaskId,
         );
+        add(LoadTasksEvent(firebaseTaskListId: event.firebaseTaskListId));
       } catch (e) {
         log(e.toString());
       }
