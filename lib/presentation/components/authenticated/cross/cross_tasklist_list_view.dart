@@ -8,10 +8,8 @@ import 'package:trifecta/bloc/Cross/TaskListBloc/tasklist_bloc.dart';
 class CrossTaskListListView extends StatefulWidget {
   const CrossTaskListListView({
     super.key,
-    required this.loadTaskList,
   });
 
-  final void Function(String firebaseTaskListId) loadTaskList;
 
   @override
   State<CrossTaskListListView> createState() => _CrossTaskListListViewState();
@@ -65,7 +63,7 @@ class _CrossTaskListListViewState extends State<CrossTaskListListView> {
                   });
                 },
                 child: Padding(
-                  padding: const EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.all(2.0),
                   child: Text(
                     '[${state.crossTaskLists[index].taskListTitle.toUpperCase()}]',
                     style: TextStyle(
