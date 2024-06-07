@@ -23,7 +23,7 @@ class _NewTaskFormState extends State<NewTaskForm> {
       context.read<TaskBloc>().add(CreateNewTaskEvent(
           taskTitle: _titleController.text.trim(),
           firebaseTaskListId: widget.firebaseTaskListId));
-          HapticFeedback.heavyImpact();
+      HapticFeedback.heavyImpact();
     }
   }
 
