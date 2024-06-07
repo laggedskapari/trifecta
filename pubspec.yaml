@@ -50,6 +50,7 @@ dependencies:
     path: packages/cross
   trifecta_authentication:
     path: packages/trifecta_authentication
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
