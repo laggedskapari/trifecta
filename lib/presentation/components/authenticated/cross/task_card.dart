@@ -33,6 +33,7 @@ class TaskCard extends StatelessWidget {
           taskCompletionStatus: !task.isCompleted,
         ),
       );
+      HapticFeedback.heavyImpact();
       Navigator.pop(context);
     }
 
@@ -50,11 +51,15 @@ class TaskCard extends StatelessWidget {
     return Container(
       alignment: Alignment.centerRight,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 3.0),
+        padding: const EdgeInsets.symmetric(
+          vertical: 3.0,
+        ),
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 5,
+              ),
               child: Icon(
                 (task.isCompleted)
                     ? Icons.task_alt_rounded
@@ -65,7 +70,7 @@ class TaskCard extends StatelessWidget {
                     ? Theme.of(context).colorScheme.secondary
                     : (task.isImportant)
                         ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.primary.withOpacity(.6),
+                        : Theme.of(context).colorScheme.primary.withOpacity(.7),
                 size: 20,
               ),
             ),
@@ -75,7 +80,8 @@ class TaskCard extends StatelessWidget {
               },
               onHorizontalDragUpdate: (DragUpdateDetails details) {},
               onHorizontalDragEnd: (DragEndDetails details) {
-                if (details.globalPosition.dx - initialOffset > 100 && !task.isCompleted) {
+                if (details.globalPosition.dx - initialOffset > 100 &&
+                    !task.isCompleted) {
                   crossTask();
                   HapticFeedback.heavyImpact();
                 }
@@ -85,7 +91,8 @@ class TaskCard extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) => ConfirmDialogBox(
-                      dialogTitle: 'UNCROSS [${task.taskTitle}]?',
+                      dialogAction: 'CROSS',
+                      dialogTitle: task.taskTitle,
                       onAffirmative: unCrossTask,
                       onNegative: () {
                         Navigator.pop(context);
@@ -113,7 +120,7 @@ class TaskCard extends StatelessWidget {
                           : Theme.of(context)
                               .colorScheme
                               .primary
-                              .withOpacity(.6),
+                              .withOpacity(.7),
                   decoration: (task.isCompleted)
                       ? TextDecoration.lineThrough
                       : TextDecoration.none,
