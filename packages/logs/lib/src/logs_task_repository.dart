@@ -5,9 +5,9 @@ abstract class LogsTaskRepository {
     required String firebaseLogId,
   });
 
-  Future<void> createNewLogTask({
+  Future<void> createNewLogTasks({
     required String firebaseLogId,
-    required String taskTitle,
+    required List<LogTask> logTasks,
   });
 
   Future<void> deleteLogTask({

@@ -33,23 +33,25 @@ class LogsTaskRepositoryImplementation implements LogsTaskRepository {
   }
 
   @override
-  Future<void> createNewLogTask({
+  Future<void> createNewLogTasks({
     required String firebaseLogId,
-    required String taskTitle,
+    required List<LogTask> logTasks,
   }) async {
     try {
-      final newLogTaskRef = _trifectaUserReference
-          .doc(_firebaseAuth.currentUser!.uid)
-          .collection('logs')
-          .doc(firebaseLogId)
-          .collection('tasks')
-          .doc();
-      final newLogTask = LogTask(
-        logTaskTitle: taskTitle,
-        firebaseLogTaskId: newLogTaskRef.id,
-      );
-      await newLogTaskRef
-          .set(newLogTask.toLogTaskEntity().toFirestoreDocument());
+      final newLogTaskWriteBatch = FirebaseFirestore.instance.batch();
+      logTasks.forEach((logTask) {
+        final newLogTaskRef = _trifectaUserReference
+            .doc(_firebaseAuth.currentUser!.uid)
+            .collection('logs')
+            .doc(firebaseLogId)
+            .collection('logTasks')
+            .doc();
+        newLogTaskWriteBatch.set(
+          newLogTaskRef,
+          logTask.toLogTaskEntity().toFirestoreDocument(),
+        );
+      });
+      await newLogTaskWriteBatch.commit();
     } catch (e) {
       log(e.toString());
     }
