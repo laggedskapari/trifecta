@@ -42,5 +42,10 @@ final trifectaRed = ThemeData(
       fontWeight: FontWeight.w700,
       color: Color.fromARGB(255, 75, 89, 117),
     ),
+    labelLarge: TextStyle(
+        fontSize: 19,
+        fontFamily: 'JetBrainsMono',
+        fontWeight: FontWeight.w900,
+        color: Color.fromARGB(255, 100, 102, 105)),
   ),
 );
