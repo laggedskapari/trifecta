@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:log/logs_repository.dart';
 import 'package:log/src/entity/logs_log_entity.dart';
 import 'package:log/src/logs_log_repository.dart';
 import 'package:log/src/model/logs_log.dart';
@@ -11,6 +12,7 @@ class LogsLogRepositoryImplementation implements LogsLogRepository {
   final FirebaseAuth _firebaseAuth;
   final CollectionReference _trifectaUserReference =
       FirebaseFirestore.instance.collection('trifectaUsers');
+  final _trifectaFirestore = FirebaseFirestore.instance;
 
   LogsLogRepositoryImplementation({FirebaseAuth? firebaseAuth})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
@@ -30,8 +32,11 @@ class LogsLogRepositoryImplementation implements LogsLogRepository {
   }
 
   @override
-  Future<void> createNewLogsLog(
-      {required String logTitle, required int logDuration}) async {
+  Future<void> createNewLogsLog({
+    required String logTitle,
+    required int logDuration,
+    required List<LogTask> logTasks,
+  }) async {
     try {
       const uuid = Uuid();
       final today = DateTime.now();
@@ -55,8 +60,30 @@ class LogsLogRepositoryImplementation implements LogsLogRepository {
         logInitDate: today,
       );
       await newLogsLogRef.set(newLog.toLogsLogEntity().toFirestoreDocument());
+
+      createLogTasks(newLogsLogRef: newLogsLogRef, logTasks: logTasks);
+
     } catch (e) {
       log(e.toString());
+    }
+  }
+
+  void createLogTasks({
+    required DocumentReference newLogsLogRef,
+    required List<LogTask> logTasks,
+  }) async {
+    try {
+      final logTasksBatch = _trifectaFirestore.batch();
+      logTasks.forEach((logTask) {
+        final newLogTaskRef = newLogsLogRef.collection('logTasks').doc();
+        logTasksBatch.set(
+          newLogTaskRef,
+          logTask.toLogTaskEntity().toFirestoreDocument(),
+        );
+      });
+      await logTasksBatch.commit();
+    } catch (e) {
+      throw e;
     }
   }
 
