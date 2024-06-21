@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:log/logs_repository.dart';
+import 'package:trifecta/bloc/Logs/LogsBloc/logs_bloc.dart';
 
 class NewLogForm extends StatefulWidget {
   const NewLogForm({super.key});
@@ -38,6 +40,10 @@ class _NewLogFormState extends State<NewLogForm> {
       alignment: Alignment.center,
       child: Column(
         children: [
+          Text(
+            'CREATE NEW LOG',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           TextField(
             controller: _titleController,
             keyboardType: TextInputType.text,
@@ -133,6 +139,34 @@ class _NewLogFormState extends State<NewLogForm> {
                 )
               ],
             ),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  '[PROCEED]',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w900,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  '[DECLINE]',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w900,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                ),
+              )
+            ],
           ),
         ],
       ),

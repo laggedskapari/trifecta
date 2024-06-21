@@ -1,9 +1,13 @@
 import 'package:cross/cross_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:log/logs_repository.dart';
 import 'package:trifecta/bloc/Cross/TaskBloc/task_bloc.dart';
 import 'package:trifecta/bloc/Cross/TaskListBloc/tasklist_bloc.dart';
+import 'package:trifecta/bloc/Logs/LogsBloc/logs_bloc.dart';
 import 'package:trifecta/presentation/components/authenticated/cross/cross_page.dart';
+import 'package:trifecta/presentation/components/authenticated/logs/logs_page.dart';
+import 'package:trifecta/presentation/components/authenticated/logs/new_log_form.dart';
 import 'package:trifecta/presentation/components/authenticated/trifecta_navigation_bar.dart';
 import 'package:trifecta/presentation/components/trifecta_app_bar.dart';
 
@@ -34,8 +38,13 @@ class _AuthenticatedScreenState extends State<AuthenticatedScreen> {
                 crossTaskRepository:
                     RepositoryProvider.of<CrossTaskRepository>(context)),
           ),
+          BlocProvider(
+            create: (context) => LogsBloc(
+                logsLogRepository:
+                    RepositoryProvider.of<LogsLogRepository>(context)),
+          )
         ],
-        child: const CrossPage(),
+        child: const NewLogForm(),
       ),
       bottomNavigationBar: TrifectaNavigationBar(
         changeScreen: changeScreen,
