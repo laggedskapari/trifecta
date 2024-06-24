@@ -8,7 +8,6 @@ part 'tasklist_state.dart';
 part 'tasklist_event.dart';
 
 class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
-
   final CrossTaskListRepository crossTaskListRepository;
 
   TaskListBloc({required this.crossTaskListRepository})
@@ -19,6 +18,7 @@ class TaskListBloc extends Bloc<TaskListEvent, TaskListState> {
         final taskLists = await crossTaskListRepository.getAllTaskLists().first;
         emit(TaskListState.success(crossTaskLists: taskLists));
       } catch (e) {
+        emit(TaskListState.failure(errorMessage: e.toString()));
         log(e.toString());
       }
     });

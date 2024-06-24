@@ -2,10 +2,12 @@ import 'package:cross/cross_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:log/logs_repository.dart';
+import 'package:trifecta/bloc/Authentication/SignInBloc/sign_in_bloc.dart';
 import 'package:trifecta/bloc/Cross/TaskBloc/task_bloc.dart';
 import 'package:trifecta/bloc/Cross/TaskListBloc/tasklist_bloc.dart';
 import 'package:trifecta/bloc/Logs/LogsBloc/logs_bloc.dart';
 import 'package:trifecta/presentation/components/authenticated/cross/cross_page.dart';
+import 'package:trifecta/presentation/components/authenticated/logs/log_info_card.dart';
 import 'package:trifecta/presentation/components/authenticated/logs/logs_page.dart';
 import 'package:trifecta/presentation/components/authenticated/logs/new_log_form.dart';
 import 'package:trifecta/presentation/components/authenticated/trifecta_navigation_bar.dart';
@@ -41,10 +43,11 @@ class _AuthenticatedScreenState extends State<AuthenticatedScreen> {
           BlocProvider(
             create: (context) => LogsBloc(
                 logsLogRepository:
-                    RepositoryProvider.of<LogsLogRepository>(context)),
+                    RepositoryProvider.of<LogsLogRepository>(context))
+              ..add(LoadLogsEvent()),
           )
         ],
-        child: const NewLogForm(),
+        child: const LogsPage(),
       ),
       bottomNavigationBar: TrifectaNavigationBar(
         changeScreen: changeScreen,

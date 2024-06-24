@@ -15,9 +15,11 @@ final class LogsState extends Equatable {
 
   const LogsState.initiate() : this._();
   const LogsState.processing() : this._(status: LogsStatus.processing);
-  const LogsState.success({required List<LogsLog> logs}) : this._(status: LogsStatus.success, logs: logs);
-  const LogsState.failure({required String errorMessage}) : this._(status: LogsStatus.failure, error: errorMessage);
+  const LogsState.success({required List<LogsLog> logs})
+      : this._(status: LogsStatus.success, logs: logs);
+  const LogsState.failure({required String errorMessage})
+      : this._(status: LogsStatus.failure, error: errorMessage);
 
-  @override 
-  List<Object?> get props => [logs, error, logs];
+  @override
+  List<Object?> get props => [logs, error, status];
 }

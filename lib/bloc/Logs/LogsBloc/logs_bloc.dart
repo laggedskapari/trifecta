@@ -29,8 +29,6 @@ class LogsBloc extends Bloc<LogsEvent, LogsState> {
         );
       } catch (e) {
         print(e.toString());
-        print('You messed up!');
-
       }
     });
     on<DeleteLogEvent>((event, emit) {});

@@ -12,6 +12,7 @@ class LogsLog extends Equatable {
   final DateTime logEndDate;
   final DateTime logCompletedOn;
   final DateTime logInitDate;
+  final int logAttendance;
 
   const LogsLog({
     required this.logEndDate,
@@ -23,6 +24,7 @@ class LogsLog extends Equatable {
     this.isSuccess = false,
     required this.logDuration,
     this.successRate = 0,
+    this.logAttendance = 0,
     required this.logInitDate,
   });
 
@@ -35,6 +37,7 @@ class LogsLog extends Equatable {
       logCreatedOn: logCreatedOn,
       isSuccess: isSuccess,
       logDuration: logDuration,
+      logAttendance: logAttendance,
       successRate: successRate,
       logEndDate: logEndDate,
       logCompletedOn: logCompletedOn,
@@ -53,6 +56,7 @@ class LogsLog extends Equatable {
       isSuccess: entity.isSuccess,
       logCompletedOn: entity.logCompletedOn,
       logEndDate: entity.logEndDate,
+      logAttendance: entity.logAttendance,
     );
   }
 
@@ -68,5 +72,6 @@ class LogsLog extends Equatable {
         logEndDate,
         logCompletedOn,
         logInitDate,
+        logAttendance,
       ];
 }

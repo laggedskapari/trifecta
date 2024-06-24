@@ -33,13 +33,13 @@ final trifectaDark = ThemeData(
     labelSmall: TextStyle(
       fontSize: 12,
       fontFamily: 'JetBrainsMono',
-      fontWeight: FontWeight.w700,
+      fontWeight: FontWeight.w900,
       color: Color.fromARGB(255, 100, 102, 105),
     ),
     labelMedium: TextStyle(
       fontSize: 15,
       fontFamily: 'JetBrainsMono',
-      fontWeight: FontWeight.w700,
+      fontWeight: FontWeight.w900,
       color: Color.fromARGB(255, 100, 102, 105),
     ),
     labelLarge: TextStyle(

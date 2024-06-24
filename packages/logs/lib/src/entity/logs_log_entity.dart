@@ -9,6 +9,7 @@ class LogsLogEntity {
   final DateTime logEndDate;
   final DateTime logCompletedOn;
   final DateTime logInitDate;
+  final int logAttendance;
 
   const LogsLogEntity({
     required this.logCompletedOn,
@@ -21,6 +22,7 @@ class LogsLogEntity {
     required this.logDuration,
     required this.successRate,
     required this.logInitDate,
+    required this.logAttendance,
   });
 
   Map<String, Object?> toFirestoreDocument() {
@@ -33,23 +35,25 @@ class LogsLogEntity {
       'logDuration': logDuration,
       'successRate': successRate,
       'logEndDate': logEndDate,
-      'logCompleted': logCompletedOn, 
+      'logCompletedOn': logCompletedOn, 
       'logInitDate': logInitDate,
+      'logAttendance': logAttendance,
     };
   }
 
   static LogsLogEntity fromFirestoreDocument(Map<String, dynamic> doc) {
     return LogsLogEntity(
-      logInitDate: doc['logInitDate'],
-      logEndDate: doc['logEndDate'],
-      logCompletedOn: doc['logCompletedOn'],
+      logInitDate: doc['logInitDate'].toDate(),
+      logEndDate: doc['logEndDate'].toDate(),
+      logCompletedOn: doc['logCompletedOn'].toDate(),
       firebaseLogId: doc['firebaseLogId'],
       logId: doc['logId'],
       logTitle: doc['logTitle'],
-      logCreatedOn: doc['logCreatedOn'],
+      logCreatedOn: doc['logCreatedOn'].toDate(),
       isSuccess: doc['isSuccess'],
       logDuration: doc['logDuration'],
       successRate: doc['successRate'],
+      logAttendance: doc['logAttendance'],
     );
   }
 }
