@@ -39,7 +39,6 @@ class _LogsListViewState extends State<LogsListView> {
           scrollDirection: Axis.horizontal,
           children: [
             Container(
-              height: deviceHeight * .10,
               alignment: Alignment.center,
               margin: EdgeInsets.symmetric(
                 horizontal: deviceWidth * .005,
@@ -56,7 +55,7 @@ class _LogsListViewState extends State<LogsListView> {
                       changeLogIndex(logIndex: index);
                       BlocProvider.of<LogTaskBloc>(context).add(
                         LoadLogTasksEvent(
-                          firebaseLogId: state.logs[index].firebaseLogId!,
+                          firebaseLogId: state.logs[index].firebaseLogId,
                         ),
                       );
                       currentLogIndex = index;
@@ -66,7 +65,7 @@ class _LogsListViewState extends State<LogsListView> {
                   child: Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: Text(
-                      '[${state.logs[index].logTitle!.toUpperCase()}]',
+                      '[${state.logs[index].logTitle.toUpperCase()}]',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: index == currentLogIndex
@@ -85,7 +84,7 @@ class _LogsListViewState extends State<LogsListView> {
               onTap: () async {
                 await showDialog(
                   context: context,
-                  builder: (BuildContext context) => const NewLogForm(),
+                  builder: (context) => const NewLogForm(),
                 );
               },
               child: Padding(
