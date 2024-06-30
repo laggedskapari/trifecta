@@ -20,7 +20,7 @@ final trifectaDark = ThemeData(
       color: Color.fromARGB(255, 226, 183, 20),
     ),
     titleMedium: TextStyle(
-      fontSize: 19,
+      fontSize: 20,
       fontFamily: 'JetBrainsMono',
       fontWeight: FontWeight.w900,
       color: Color.fromARGB(255, 226, 183, 20),
