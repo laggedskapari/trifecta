@@ -12,26 +12,18 @@ class LogsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      child: Column(
+      child: const Column(
         children: [
           SizedBox(
             height: 30,
             child: LogsListView(),
           ),
-          LogInfoCard(
-            log: LogsLog(
-              logEndDate: DateTime.now(),
-              logCompletedOn: DateTime.now(),
-              firebaseLogId: '',
-              logId: '',
-              logTitle: 'BE BETTER',
-              logCreatedOn: DateTime.now(),
-              logDuration: 80,
-              logInitDate: DateTime.now(),
-              logAttendance: 10,
+          LogInfoCard(),
+          Expanded(
+            child: LogsTasksListView(
+              logTasks: [],
             ),
           ),
-          LogsTasksListView(),
         ],
       ),
     );
