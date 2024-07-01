@@ -5,6 +5,7 @@ import 'package:log/logs_repository.dart';
 import 'package:trifecta/bloc/Authentication/SignInBloc/sign_in_bloc.dart';
 import 'package:trifecta/bloc/Cross/TaskBloc/task_bloc.dart';
 import 'package:trifecta/bloc/Cross/TaskListBloc/tasklist_bloc.dart';
+import 'package:trifecta/bloc/Logs/LogBloc/log_bloc.dart';
 import 'package:trifecta/bloc/Logs/LogsBloc/logs_bloc.dart';
 import 'package:trifecta/presentation/components/authenticated/cross/cross_page.dart';
 import 'package:trifecta/presentation/components/authenticated/logs/log_info_card.dart';
@@ -45,7 +46,10 @@ class _AuthenticatedScreenState extends State<AuthenticatedScreen> {
                 logsLogRepository:
                     RepositoryProvider.of<LogsLogRepository>(context))
               ..add(LoadLogsEvent()),
-          )
+          ),
+          BlocProvider(
+            create: (context) => LogBloc(),
+          ),
         ],
         child: const LogsPage(),
       ),
