@@ -9,15 +9,6 @@ class LoadLogsEvent extends LogsEvent {
   List<Object?> get props => [];
 }
 
-class LoadLogEvent extends LogsEvent {
-  final String firebaseLogId;
-
-  const LoadLogEvent({required this.firebaseLogId});
-
-  @override 
-  List<Object?> get props => [firebaseLogId];
-}
-
 class CreateNewLogEvent extends LogsEvent {
   final String logTitle;
   final List<LogTask> logTasks;
