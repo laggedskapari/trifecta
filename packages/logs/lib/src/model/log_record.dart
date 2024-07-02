@@ -3,7 +3,7 @@ import 'package:log/src/entity/log_record_entity.dart';
 
 class LogRecord extends Equatable {
   final DateTime logRecordDate;
-  final List<String> logRecordTasks;
+  final List<dynamic> logRecordTasks;
 
   const LogRecord({
     required this.logRecordDate,
