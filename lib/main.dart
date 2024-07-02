@@ -14,6 +14,8 @@ void main() async {
       crossTaskListRepository: CrossTasklistRepositoryImplementation(),
       crossTaskRepository: CrossTaskRepositoryImplementation(),
       logsLogRepository: LogsLogRepositoryImplementation(),
+      logsTaskRepository: LogsTaskRepositoryImplementation(),
+      logRecordRepository: LogRecordRepositoryImplementation(),
     ),
   );
 }
