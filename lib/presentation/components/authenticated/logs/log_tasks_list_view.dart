@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:trifecta/bloc/Logs/LogRecordBloc/log_record_bloc.dart';
 import 'package:trifecta/bloc/Logs/LogTaskBloc/log_task_bloc.dart';
+import 'package:trifecta/presentation/components/authenticated/logs/log_task_card.dart';
 import 'package:trifecta/presentation/components/confirm_dialog_box.dart';
 
 class LogTasksListView extends StatelessWidget {
@@ -9,8 +11,14 @@ class LogTasksListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final deviceHeight = MediaQuery.of(context).size.height;
+    final deviceWidth = MediaQuery.of(context).size.width;
+
     return Container(
-      margin: const EdgeInsets.fromLTRB(0, 15, 5, 0),
+      margin: EdgeInsets.symmetric(
+        horizontal: deviceWidth * .05,
+        vertical: deviceHeight * .05,
+      ),
       alignment: Alignment.centerLeft,
       child: BlocBuilder<LogTaskBloc, LogTaskState>(builder: (context, state) {
         if (state.status == LogTaskStatus.processing) {
@@ -54,8 +62,20 @@ class LogTasksListView extends StatelessWidget {
                         color: Theme.of(context).colorScheme.error,
                       ),
                     ),
-                    child: Text(
-                      state.logTasks[index].logTaskTitle,
+                    child: InkWell(
+                      onTap: () {
+                        BlocProvider.of<LogRecordBloc>(context).add(
+                          CreateLogRecord(
+                            firebaseLogId: 'Pm3VbYgX6t2XW442sS2E',
+                            firebaseLogTaskId: state.logTasks[index].firebaseLogTaskId,
+                            logRecordDate: "20102024",
+                          ),
+                        );
+                      },
+                      child: LogTaskCard(
+                        logTask: state.logTasks[index],
+                        isCompleted: false,
+                      ),
                     ),
                   ),
                   itemCount: state.logTasks.length,
