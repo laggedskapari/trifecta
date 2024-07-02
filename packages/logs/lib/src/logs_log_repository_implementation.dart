@@ -74,13 +74,14 @@ class LogsLogRepositoryImplementation implements LogsLogRepository {
   }) async {
     try {
       final logTasksBatch = _trifectaFirestore.batch();
-      logTasks.forEach((logTask) {
+      for (var logTask in logTasks) {
         final newLogTaskRef = newLogsLogRef.collection('logTasks').doc();
+        final newLogTask = LogTask(logTaskTitle: logTask.logTaskTitle, firebaseLogTaskId: newLogTaskRef.id);
         logTasksBatch.set(
           newLogTaskRef,
-          logTask.toLogTaskEntity().toFirestoreDocument(),
+          newLogTask.toLogTaskEntity().toFirestoreDocument(),
         );
-      });
+      }
       await logTasksBatch.commit();
     } catch (e) {
       throw e;

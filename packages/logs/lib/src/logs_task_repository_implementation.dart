@@ -22,7 +22,7 @@ class LogsTaskRepositoryImplementation implements LogsTaskRepository {
         .doc(_firebaseAuth.currentUser!.uid)
         .collection('logs')
         .doc(firebaseLogId)
-        .collection('tasks');
+        .collection('logTasks');
     return logTasksRef.snapshots().map((logTasksSnapshot) {
       return logTasksSnapshot.docs.map((doc) {
         Map<String, dynamic> logTasksData = doc.data();
@@ -32,6 +32,7 @@ class LogsTaskRepositoryImplementation implements LogsTaskRepository {
     });
   }
 
+  
   @override
   Future<void> createNewLogTasks({
     required String firebaseLogId,
