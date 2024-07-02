@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:trifecta/bloc/Logs/LogBloc/log_bloc.dart';
+import 'package:trifecta/bloc/Logs/LogRecordBloc/log_record_bloc.dart';
 import 'package:trifecta/bloc/Logs/LogTaskBloc/log_task_bloc.dart';
 import 'package:trifecta/bloc/Logs/LogsBloc/logs_bloc.dart';
 import 'package:trifecta/presentation/components/authenticated/logs/new_log_form.dart';
@@ -54,14 +55,20 @@ class _LogsListViewState extends State<LogsListView> {
                   onTap: () {
                     setState(() {
                       changeLogIndex(logIndex: index);
-                      // BlocProvider.of<LogTaskBloc>(context).add(
-                      //   LoadLogTasksEvent(
-                      //     firebaseLogId: state.logs[index].firebaseLogId,
-                      //   ),
-                      // );
+                      BlocProvider.of<LogTaskBloc>(context).add(
+                        LoadLogTasksEvent(
+                          firebaseLogId: state.logs[index].firebaseLogId,
+                        ),
+                      );
                       BlocProvider.of<LogBloc>(context).add(
                         LoadLogEvent(
                           log: state.logs[index],
+                        ),
+                      );
+                      BlocProvider.of<LogRecordBloc>(context).add(
+                        LoadTodayLogRecord(
+                          firebaseLogId: state.logs[index].firebaseLogId,
+                          today: '202020',
                         ),
                       );
                       currentLogIndex = index;
