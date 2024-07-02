@@ -1,6 +1,6 @@
 class LogRecordEntity {
   final DateTime logRecordDate;
-  final List<String> logRecordTasks;
+  final List<dynamic> logRecordTasks;
 
   const LogRecordEntity({
     required this.logRecordDate,
@@ -14,10 +14,10 @@ class LogRecordEntity {
     };
   }
 
-  static LogRecordEntity fromFirebaseDocument(Map<String, dynamic> doc) {
+  static LogRecordEntity fromFirebaseDocument(Map<String, dynamic>? doc) {
     return LogRecordEntity(
-      logRecordDate: doc['logRecordDate'],
-      logRecordTasks: doc['logRecordTasks'],
+      logRecordDate: doc?['logRecordDate'].toDate(),
+      logRecordTasks: doc?['logRecordTasks'],
     );
   }
 }
