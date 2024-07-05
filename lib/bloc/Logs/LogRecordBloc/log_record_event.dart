@@ -6,15 +6,13 @@ sealed class LogRecordEvent extends Equatable {
 
 class LoadTodayLogRecord extends LogRecordEvent {
   final String firebaseLogId;
-  final String today;
 
   const LoadTodayLogRecord({
     required this.firebaseLogId,
-    required this.today,
   });
 
   @override
-  List<Object?> get props => [firebaseLogId, today];
+  List<Object?> get props => [firebaseLogId];
 }
 
 class CreateLogRecord extends LogRecordEvent {
@@ -30,4 +28,24 @@ class CreateLogRecord extends LogRecordEvent {
 
   @override 
   List<Object?> get props => [firebaseLogId, logRecordDate, firebaseLogTaskId];
+}
+
+class DeleteLogRecord extends LogRecordEvent {
+  final String firebaseLogId;
+  final String firebaseLogTaskId;
+
+  const DeleteLogRecord({required this.firebaseLogId ,required this.firebaseLogTaskId, });
+
+  @override 
+  List<Object?> get props => [firebaseLogId, firebaseLogTaskId];
+}
+
+class RemoveTaskFromLogRecord extends LogRecordEvent {
+  final String firebaseLogId;
+  final String firebaseLogTaskId;
+
+  const RemoveTaskFromLogRecord({required this.firebaseLogId, required this.firebaseLogTaskId});
+
+  @override 
+  List<Object?> get props => [firebaseLogId, firebaseLogTaskId];
 }

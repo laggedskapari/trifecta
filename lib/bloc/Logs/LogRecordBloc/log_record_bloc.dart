@@ -11,21 +11,41 @@ class LogRecordBloc extends Bloc<LogRecordEvent, LogRecordState> {
   LogRecordBloc({required this.logRecordRepository})
       : super(const LogRecordState.initiate()) {
     on<LoadTodayLogRecord>((event, emit) async {
-      emit(const LogRecordState.processing());
-      final logRecords = await logRecordRepository.getAllLogRecords(
-          firebaseLogId: event.firebaseLogId).first;
-      final todayLogRecord = await logRecordRepository.getTodayLogRecord(firebaseLogId: event.firebaseLogId);
-      print(todayLogRecord);
-      print(logRecords.toList());
-      emit(LogRecordState.success(logRecordTasks: todayLogRecord.logRecordTasks));
+      try {
+        emit(const LogRecordState.processing());
+        final todayLogRecord = await logRecordRepository.getTodayLogRecord(
+          firebaseLogId: event.firebaseLogId,
+        );
+        emit(LogRecordState.success(
+          logRecordTasks: todayLogRecord.logRecordTasks,
+        ));
+      } catch (e) {
+        emit(LogRecordState.failure(errorMessage: e.toString()));
+      }
     });
 
     on<CreateLogRecord>((event, emit) async {
-      await logRecordRepository.createNewLogRecord(
-        firebaseLogId: event.firebaseLogId,
-        firebaseLogTaskId: event.firebaseLogTaskId,
-        logRecordDate: event.logRecordDate,
-      );
+      try {
+        await logRecordRepository.createNewLogRecord(
+          firebaseLogId: event.firebaseLogId,
+          firebaseLogTaskId: event.firebaseLogTaskId,
+          logRecordDate: event.logRecordDate,
+        );
+        add(LoadTodayLogRecord(firebaseLogId: event.firebaseLogId));
+      } catch (e) {
+        emit(LogRecordState.failure(errorMessage: e.toString()));
+      }
+    });
+    on<RemoveTaskFromLogRecord>((event, emit) async {
+      try {
+        await logRecordRepository.removeTaskFromLogRecord(
+          firebaseLogId: event.firebaseLogId,
+          firebaseLogTaskId: event.firebaseLogTaskId,
+        );
+        add(LoadTodayLogRecord(firebaseLogId: event.firebaseLogId));
+      } catch (e) {
+        emit(LogRecordState.failure(errorMessage: e.toString()));
+      }
     });
   }
 }
