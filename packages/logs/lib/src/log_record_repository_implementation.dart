@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:log/src/entity/entities.dart';
 import 'package:log/src/log_record_repository.dart';
 import 'package:log/src/model/models.dart';
@@ -42,9 +43,10 @@ class LogRecordRepositoryImplementation implements LogRecordRepository {
         .collection('logRecords')
         .doc(today);
     return todayLogRecordRef.get().then((logRecordSnapshot) {
-      return LogRecord.fromLogRecordEntity(LogRecordEntity.fromFirebaseDocument(logRecordSnapshot.data()));
+      return LogRecord.fromLogRecordEntity(
+          LogRecordEntity.fromFirebaseDocument(logRecordSnapshot.data()));
     });
- }
+  }
 
   @override
   Future<void> createNewLogRecord({
@@ -62,53 +64,69 @@ class LogRecordRepositoryImplementation implements LogRecordRepository {
           .doc(firebaseLogId)
           .collection('logRecords')
           .doc(today);
+      final recordData = await newLogTaskRecordRef.get();
+      if (recordData.exists) {
+        newLogTaskRecordRef.update({
+          "logRecordTasks": FieldValue.arrayUnion([firebaseLogTaskId])
+        });
+        return;
+      }
       final newLogTaskRecord = LogRecord(
         logRecordDate: DateTime.now(),
         logRecordTasks: [firebaseLogTaskId],
       );
 
-      await newLogTaskRecordRef
-          .set(newLogTaskRecord.toLogRecordEntity().toFirebaseDocument());
+      await newLogTaskRecordRef.set(
+          newLogTaskRecord.toLogRecordEntity().toFirebaseDocument(),
+          SetOptions(merge: true));
     } catch (e) {
       log(e.toString());
     }
   }
 
   @override
-  Future<bool> isLogTaskCompletedToday({
-    required String firebaseLogId,
-  }) async {
-    final String today = DateTime.now().day.toString() +
-        DateTime.now().month.toString() +
-        DateTime.now().year.toString();
-    final logRecordRef = _trifectaUserReference
-        .doc(_firebaseAuth.currentUser!.uid)
-        .collection('logs')
-        .doc(firebaseLogId)
-        .collection('logRecords')
-        .doc(today);
-
-    bool isCompleted = false;
-    await logRecordRef.get().then((doc) {
-      doc.exists ? isCompleted = true : isCompleted = false;
-    });
-    return isCompleted;
-  }
-
-  @override
   Future<void> deleteLogRecord({
     required String firebaseLogId,
     required String firebaseLogRecordId,
-  }) {
-    throw UnimplementedError();
+  }) async {
+    try {
+      await _trifectaUserReference
+          .doc(_firebaseAuth.currentUser!.uid)
+          .collection('logs')
+          .doc(firebaseLogId)
+          .collection('logRecords')
+          .doc(firebaseLogRecordId)
+          .delete();
+    } catch (e) {
+      throw e.toString();
+    }
   }
 
   @override
   Future<void> removeTaskFromLogRecord({
     required String firebaseLogId,
-    required String firebaseLogRecordId,
     required String firebaseLogTaskId,
-  }) {
-    throw UnimplementedError();
+  }) async {
+    try {
+      final String today = DateTime.now().day.toString() +
+          DateTime.now().month.toString() +
+          DateTime.now().year.toString();
+      final logTaskRecordRef = _trifectaUserReference
+          .doc(_firebaseAuth.currentUser!.uid)
+          .collection('logs')
+          .doc(firebaseLogId)
+          .collection('logRecords')
+          .doc(today);
+      final recordData = await logTaskRecordRef.get();
+      if (recordData.exists) {
+        logTaskRecordRef.update({
+          "logRecordTasks": FieldValue.arrayRemove([firebaseLogTaskId])
+        });
+        return;
+      }
+      throw 'Log record do not exists.';
+    } catch (e) {
+      throw e.toString();
+    }
   }
 }

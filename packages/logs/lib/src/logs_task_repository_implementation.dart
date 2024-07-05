@@ -33,46 +33,28 @@ class LogsTaskRepositoryImplementation implements LogsTaskRepository {
   }
 
   
-  @override
-  Future<void> createNewLogTasks({
-    required String firebaseLogId,
-    required List<LogTask> logTasks,
-  }) async {
-    try {
-      final newLogTaskWriteBatch = FirebaseFirestore.instance.batch();
-      logTasks.forEach((logTask) {
-        final newLogTaskRef = _trifectaUserReference
-            .doc(_firebaseAuth.currentUser!.uid)
-            .collection('logs')
-            .doc(firebaseLogId)
-            .collection('logTasks')
-            .doc();
-        newLogTaskWriteBatch.set(
-          newLogTaskRef,
-          logTask.toLogTaskEntity().toFirestoreDocument(),
-        );
-      });
-      await newLogTaskWriteBatch.commit();
-    } catch (e) {
-      log(e.toString());
-    }
-  }
-
-  @override
-  Future<void> deleteLogTask({
-    required String firebaseLogId,
-    required String firebaseLogTaskId,
-  }) async {
-    try {
-      await _trifectaUserReference
-          .doc(_firebaseAuth.currentUser!.uid)
-          .collection('logs')
-          .doc(firebaseLogId)
-          .collection('tasks')
-          .doc(firebaseLogTaskId)
-          .delete();
-    } catch (e) {
-      log(e.toString());
-    }
-  }
+  // @override
+  // Future<void> createNewLogTasks({
+  //   required String firebaseLogId,
+  //   required List<LogTask> logTasks,
+  // }) async {
+  //   try {
+  //     final newLogTaskWriteBatch = FirebaseFirestore.instance.batch();
+  //     logTasks.forEach((logTask) {
+  //       final newLogTaskRef = _trifectaUserReference
+  //           .doc(_firebaseAuth.currentUser!.uid)
+  //           .collection('logs')
+  //           .doc(firebaseLogId)
+  //           .collection('logTasks')
+  //           .doc();
+  //       newLogTaskWriteBatch.set(
+  //         newLogTaskRef,
+  //         logTask.toLogTaskEntity().toFirestoreDocument(),
+  //       );
+  //     });
+  //     await newLogTaskWriteBatch.commit();
+  //   } catch (e) {
+  //     log(e.toString());
+  //   }
+  // }
 }

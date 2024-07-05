@@ -9,10 +9,6 @@ abstract class LogRecordRepository {
     required String firebaseLogId,
   });
 
-  Future<bool> isLogTaskCompletedToday({
-    required String firebaseLogId,
-  });
-
   Future<void> createNewLogRecord({
     required String firebaseLogId,
     required String firebaseLogTaskId,
@@ -23,9 +19,9 @@ abstract class LogRecordRepository {
     required String firebaseLogId,
     required String firebaseLogRecordId,
   });
+
   Future<void> removeTaskFromLogRecord({
     required String firebaseLogId,
-    required String firebaseLogRecordId,
     required String firebaseLogTaskId,
   });
 }

@@ -12,13 +12,6 @@ abstract class LogsLogRepository {
     required String firebaseLogId,
   });
 
-  Future<void> updateLogsLog({
-    required String logTitle,
-    required int logDuration,
-    required DateTime logInitDate,
-    required String firebaseLogId,
-  });
-
   Future<void> updateLogsLogSuccess({
     required String firebaseLogId,
     required bool isSuccess,

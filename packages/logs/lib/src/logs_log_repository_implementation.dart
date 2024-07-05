@@ -3,9 +3,6 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:log/logs_repository.dart';
-import 'package:log/src/entity/logs_log_entity.dart';
-import 'package:log/src/logs_log_repository.dart';
-import 'package:log/src/model/logs_log.dart';
 import 'package:uuid/uuid.dart';
 
 class LogsLogRepositoryImplementation implements LogsLogRepository {
@@ -37,35 +34,38 @@ class LogsLogRepositoryImplementation implements LogsLogRepository {
     required int logDuration,
     required List<LogTask> logTasks,
   }) async {
-    try {
-      const uuid = Uuid();
-      final today = DateTime.now();
-      final endDate = today.add(
-        Duration(
-          days: logDuration,
-        ),
-      );
-      final newLogsLogRef = await _trifectaUserReference
-          .doc(_firebaseAuth.currentUser!.uid)
-          .collection('logs')
-          .doc();
-      final LogsLog newLog = LogsLog(
-        logEndDate: endDate,
-        logCompletedOn: endDate,
-        firebaseLogId: newLogsLogRef.id,
-        logId: uuid.v4(),
-        logTitle: logTitle,
-        logCreatedOn: today,
-        logDuration: logDuration,
-        logInitDate: today,
-      );
-      await newLogsLogRef.set(newLog.toLogsLogEntity().toFirestoreDocument());
+    if (logDuration < 366 && logTasks.length < 6) {
+      try {
+        const uuid = Uuid();
+        final today = DateTime.now();
+        final endDate = today.add(
+          Duration(
+            days: logDuration,
+          ),
+        );
+        final newLogsLogRef = _trifectaUserReference
+            .doc(_firebaseAuth.currentUser!.uid)
+            .collection('logs')
+            .doc();
+        final LogsLog newLog = LogsLog(
+          logEndDate: endDate,
+          logCompletedOn: endDate,
+          firebaseLogId: newLogsLogRef.id,
+          logId: uuid.v4(),
+          logTitle: logTitle,
+          logCreatedOn: today,
+          logDuration: logDuration,
+          logInitDate: today,
+        );
+        await newLogsLogRef.set(newLog.toLogsLogEntity().toFirestoreDocument());
 
-      createLogTasks(newLogsLogRef: newLogsLogRef, logTasks: logTasks);
-
-    } catch (e) {
-      log(e.toString());
+        createLogTasks(newLogsLogRef: newLogsLogRef, logTasks: logTasks);
+      } catch (e) {
+        log(e.toString());
+        throw e.toString();
+      }
     }
+    throw 'Log tasks or log duration exceeded the limit.';
   }
 
   void createLogTasks({
@@ -76,7 +76,9 @@ class LogsLogRepositoryImplementation implements LogsLogRepository {
       final logTasksBatch = _trifectaFirestore.batch();
       for (var logTask in logTasks) {
         final newLogTaskRef = newLogsLogRef.collection('logTasks').doc();
-        final newLogTask = LogTask(logTaskTitle: logTask.logTaskTitle, firebaseLogTaskId: newLogTaskRef.id);
+        final newLogTask = LogTask(
+            logTaskTitle: logTask.logTaskTitle,
+            firebaseLogTaskId: newLogTaskRef.id);
         logTasksBatch.set(
           newLogTaskRef,
           newLogTask.toLogTaskEntity().toFirestoreDocument(),
@@ -84,7 +86,7 @@ class LogsLogRepositoryImplementation implements LogsLogRepository {
       }
       await logTasksBatch.commit();
     } catch (e) {
-      throw e;
+      throw e.toString();
     }
   }
 
@@ -100,28 +102,7 @@ class LogsLogRepositoryImplementation implements LogsLogRepository {
           .delete();
     } catch (e) {
       log(e.toString());
-    }
-  }
-
-  @override
-  Future<void> updateLogsLog({
-    required String logTitle,
-    required int logDuration,
-    required DateTime logInitDate,
-    required String firebaseLogId,
-  }) async {
-    try {
-      await _trifectaUserReference
-          .doc(_firebaseAuth.currentUser!.uid)
-          .collection('logs')
-          .doc(firebaseLogId)
-          .update({
-        'logTitle': logTitle,
-        'logDuration': logDuration,
-        'logInitDate': logInitDate,
-      });
-    } catch (e) {
-      log(e.toString());
+      throw e.toString();
     }
   }
 
@@ -140,6 +121,7 @@ class LogsLogRepositoryImplementation implements LogsLogRepository {
       });
     } catch (e) {
       log(e.toString());
+      throw e.toString();
     }
   }
 
@@ -158,6 +140,7 @@ class LogsLogRepositoryImplementation implements LogsLogRepository {
       });
     } catch (e) {
       log(e.toString());
+      throw e.toString();
     }
   }
 }

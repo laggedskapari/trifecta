@@ -1,5 +1,5 @@
 class LogRecordEntity {
-  final DateTime logRecordDate;
+  final DateTime? logRecordDate;
   final List<dynamic> logRecordTasks;
 
   const LogRecordEntity({
