@@ -8,8 +8,7 @@ part 'logs_state.dart';
 class LogsBloc extends Bloc<LogsEvent, LogsState> {
   final LogsLogRepository logsLogRepository;
 
-  LogsBloc({required this.logsLogRepository})
-      : super(const LogsState.initiate()) {
+  LogsBloc({required this.logsLogRepository}) : super(const LogsState.initiate()) {
     on<LoadLogsEvent>((event, emit) async {
       try {
         emit(const LogsState.processing());
@@ -27,10 +26,17 @@ class LogsBloc extends Bloc<LogsEvent, LogsState> {
           logDuration: event.logDuration,
           logTasks: event.logTasks,
         );
+        add(LoadLogsEvent());
       } catch (e) {
-        print(e.toString());
+        emit(LogsState.failure(errorMessage: e.toString()));
       }
     });
-    on<DeleteLogEvent>((event, emit) {});
+    on<DeleteLogEvent>((event, emit) async {
+      try {
+        await logsLogRepository.deleteLogsLog(firebaseLogId: event.firebaseLogId);
+      } catch (e) {
+        emit(LogsState.failure(errorMessage: e.toString()));
+      }
+    });
   }
 }
