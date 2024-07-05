@@ -14,36 +14,36 @@ final trifectaDark = ThemeData(
   ),
   textTheme: const TextTheme(
     titleLarge: TextStyle(
-      fontSize: 22,
-      fontFamily: 'JetBrainsMono',
-      fontWeight: FontWeight.w900,
-      color: Color.fromARGB(255, 226, 183, 20),
-    ),
-    titleMedium: TextStyle(
       fontSize: 20,
       fontFamily: 'JetBrainsMono',
       fontWeight: FontWeight.w900,
       color: Color.fromARGB(255, 226, 183, 20),
     ),
+    titleMedium: TextStyle(
+      fontSize: 17,
+      fontFamily: 'JetBrainsMono',
+      fontWeight: FontWeight.w900,
+      color: Color.fromARGB(255, 226, 183, 20),
+    ),
     bodyMedium: TextStyle(
-      fontSize: 19,
+      fontSize: 17,
       fontFamily: 'JetBrainsMono',
       color: Color.fromARGB(255, 100, 102, 105),
     ),
     labelSmall: TextStyle(
-      fontSize: 12,
-      fontFamily: 'JetBrainsMono',
-      fontWeight: FontWeight.w900,
-      color: Color.fromARGB(255, 100, 102, 105),
-    ),
-    labelMedium: TextStyle(
       fontSize: 15,
       fontFamily: 'JetBrainsMono',
       fontWeight: FontWeight.w900,
       color: Color.fromARGB(255, 100, 102, 105),
     ),
+    labelMedium: TextStyle(
+      fontSize: 17,
+      fontFamily: 'JetBrainsMono',
+      fontWeight: FontWeight.w900,
+      color: Color.fromARGB(255, 100, 102, 105),
+    ),
     labelLarge: TextStyle(
-      fontSize: 19,
+      fontSize: 20,
       fontFamily: 'JetBrainsMono',
       fontWeight: FontWeight.w900,
       color: Color.fromARGB(255, 100, 102, 105)
