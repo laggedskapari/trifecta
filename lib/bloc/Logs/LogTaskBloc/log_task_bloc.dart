@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:log/logs_repository.dart';
@@ -19,24 +17,7 @@ class LogTaskBloc extends Bloc<LogTaskEvent, LogTaskState> {
             .first;
         emit(LogTaskState.success(logTasks: logTasks));
       } catch (e) {
-        log(e.toString());
-      }
-    });
-    on<CreateNewLogTaskEvent>((event, emit) async {
-      try {
-        await logsTaskRepository.createNewLogTasks(
-            firebaseLogId: event.firebaseLogId, logTasks: event.logTasks);
-      } catch (e) {
-        log(e.toString());
-      }
-    });
-    on<DeleteLogTaskEvent>((event, emit) async {
-      try {
-        await logsTaskRepository.deleteLogTask(
-            firebaseLogId: event.firebaseLogId,
-            firebaseLogTaskId: event.firebaseLogTaskId);
-      } catch (e) {
-        log(e.toString());
+        emit(LogTaskState.failure(errorMessage: e.toString()));
       }
     });
   }

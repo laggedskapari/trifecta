@@ -27,16 +27,3 @@ class CreateNewLogTaskEvent extends LogTaskEvent {
   @override
   List<Object?> get props => [firebaseLogId, logTasks];
 }
-
-class DeleteLogTaskEvent extends LogTaskEvent {
-  final String firebaseLogId;
-  final String firebaseLogTaskId;
-
-  const DeleteLogTaskEvent({
-    required this.firebaseLogId,
-    required this.firebaseLogTaskId,
-  });
-
-  @override 
-  List<Object?> get props => [firebaseLogTaskId, firebaseLogTaskId];
-}
