@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:log/logs_repository.dart';
+import 'package:trifecta/bloc/Logs/LogsBloc/logs_bloc.dart';
+import 'package:trifecta/presentation/components/trifecata_proceed_button.dart';
+import 'package:trifecta/presentation/components/trifecta_decline_button.dart';
 
 class NewLogForm extends StatefulWidget {
   const NewLogForm({super.key});
@@ -11,9 +16,42 @@ class NewLogForm extends StatefulWidget {
 class _NewLogFormState extends State<NewLogForm> {
   List<LogTask> logTasks = [];
 
+  void onProceed() {
+    if (_logDurationController.text.trim().isNotEmpty &&
+        _logTitleController.text.trim().isNotEmpty &&
+        logTasks.isNotEmpty) {
+      BlocProvider.of<LogsBloc>(context).add(
+        CreateNewLogEvent(
+          logTitle: _logTitleController.text.trim(),
+          logTasks: logTasks,
+          logDuration: int.parse(_logDurationController.text.trim().toString()),
+        ),
+      );
+      HapticFeedback.heavyImpact();
+      Navigator.pop(context);
+    }
+  }
+
+  void onDecline() {
+    Navigator.pop(context);
+  }
+
+  void addNewTask() {
+    if (_logTaskTitleController.text.trim().isNotEmpty) {
+      logTasks.add(
+        LogTask(
+          logTaskTitle: _logTaskTitleController.text.trim(),
+          firebaseLogTaskId: '',
+        ),
+      );
+      _logTaskTitleController.text = '';
+    }
+  }
+
   final _logTitleController = TextEditingController();
   final _logDurationController = TextEditingController();
   final _logTaskTitleController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
@@ -48,8 +86,11 @@ class _NewLogFormState extends State<NewLogForm> {
             TextField(
               maxLines: 1,
               maxLength: 20,
-              controller: _logTitleController,
+              controller: _logDurationController,
               keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
               style: Theme.of(context).textTheme.titleMedium,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.zero,
@@ -59,13 +100,18 @@ class _NewLogFormState extends State<NewLogForm> {
                 border: InputBorder.none,
               ),
             ),
-            Text(
-              '//LOG TASKS',
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
-            Text(
-              'This is description for log tasks.',
-              style: Theme.of(context).textTheme.labelSmall,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '//LOG TASKS',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                Text(
+                  'Add Tasks that you need to be available daily to be completed in order to increase streak.',
+                  style: Theme.of(context).textTheme.labelSmall,
+                ),
+              ],
             ),
             Expanded(
               child: ListView.builder(
@@ -90,11 +136,10 @@ class _NewLogFormState extends State<NewLogForm> {
                     child: TextField(
                       maxLines: 1,
                       maxLength: 20,
-                      controller: _logTitleController,
-                      keyboardType: TextInputType.number,
+                      controller: _logTaskTitleController,
                       style: Theme.of(context).textTheme.titleMedium,
                       decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(top: 4),
+                        contentPadding: const EdgeInsets.only(top: 8),
                         counter: const Offstage(),
                         hintText: 'log task title...',
                         hintStyle: Theme.of(context).textTheme.labelMedium,
@@ -104,7 +149,7 @@ class _NewLogFormState extends State<NewLogForm> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: addNewTask,
                   icon: Icon(
                     Icons.add_task_rounded,
                     color: Theme.of(context).colorScheme.primary,
@@ -118,22 +163,12 @@ class _NewLogFormState extends State<NewLogForm> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      '[PROCEED]',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
+                  TrifectaProceedButton(
+                    onTap: onProceed,
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      '[DECLINE]',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ),
+                  TrifectaDeclineButton(
+                    onTap: onDecline,
+                  )
                 ],
               ),
             ),

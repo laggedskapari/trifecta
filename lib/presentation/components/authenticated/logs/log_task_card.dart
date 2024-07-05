@@ -25,11 +25,7 @@ class _LogTaskCardState extends State<LogTaskCard> {
     return BlocBuilder<LogRecordBloc, LogRecordState>(
         builder: (context, state) {
       if (state.status == LogRecordStatus.success) {
-      print(widget.logTask.firebaseLogTaskId);
-      print(state.logRecordTasks.contains(widget.logTask.firebaseLogTaskId.toString()));
-      print(state.logRecordTasks);
-      print(isTaskCompleted);
-      isTaskCompleted = state.logRecordTasks.contains(widget.logTask.firebaseLogTaskId);
+        isTaskCompleted = state.logRecordTasks.contains(widget.logTask.firebaseLogTaskId);
       }
       return Container(
         alignment: Alignment.centerLeft,

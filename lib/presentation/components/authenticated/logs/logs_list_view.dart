@@ -16,8 +16,14 @@ class LogsListView extends StatefulWidget {
 }
 
 class _LogsListViewState extends State<LogsListView> {
+  String today = DateTime.now().day.toString() +
+      DateTime.now().month.toString() +
+      DateTime.now().year.toString();
+
   int currentLogIndex = -1;
-  void changeLogIndex({required int logIndex}) {
+  void changeLogIndex({
+    required int logIndex,
+  }) {
     currentLogIndex = logIndex;
   }
 
@@ -68,7 +74,6 @@ class _LogsListViewState extends State<LogsListView> {
                       BlocProvider.of<LogRecordBloc>(context).add(
                         LoadTodayLogRecord(
                           firebaseLogId: state.logs[index].firebaseLogId,
-                          today: '202020',
                         ),
                       );
                       currentLogIndex = index;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:trifecta/bloc/Logs/LogRecordBloc/log_record_bloc.dart';
@@ -7,16 +8,19 @@ import 'package:trifecta/presentation/components/authenticated/logs/log_task_car
 import 'package:trifecta/presentation/components/confirm_dialog_box.dart';
 
 class LogTasksListView extends StatelessWidget {
-  const LogTasksListView({super.key});
+  const LogTasksListView({
+    super.key,
+    required this.firebaseLogId,
+  });
+
+  final String firebaseLogId;
 
   @override
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
-    final deviceWidth = MediaQuery.of(context).size.width;
 
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: deviceWidth * .05,
         vertical: deviceHeight * .05,
       ),
       alignment: Alignment.centerLeft,
@@ -33,49 +37,51 @@ class LogTasksListView extends StatelessWidget {
         if (state.status == LogTaskStatus.success) {
           return Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '//TASKS',
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    Text(
+                      'Completed each of the tasks provided below to increase your streak.',
+                      style: Theme.of(context).textTheme.labelSmall,
+                    ),
+                  ],
+                ),
+              ),
               Expanded(
                 child: ListView.builder(
-                  itemBuilder: (context, index) => Dismissible(
-                    key: UniqueKey(),
-                    direction: DismissDirection.endToStart,
-                    confirmDismiss: (val) async {
-                      return await showDialog(
-                            context: context,
-                            builder: (BuildContext context) => ConfirmDialogBox(
-                              dialogTitle: state.logTasks[index].logTaskTitle,
-                              onAffirmative: () {},
-                              onNegative: () {},
-                              dialogAction: 'DELETE',
-                            ),
-                          ) ??
-                          false;
+                  itemBuilder: (context, index) => InkWell(
+                    splashColor: Colors.transparent,
+                    splashFactory: NoSplash.splashFactory,
+                    onTap: () {
+                      BlocProvider.of<LogRecordBloc>(context).add(
+                        CreateLogRecord(
+                          firebaseLogId: firebaseLogId,
+                          firebaseLogTaskId:
+                              state.logTasks[index].firebaseLogTaskId,
+                          logRecordDate: "Right Now",
+                        ),
+                      );
+                      HapticFeedback.heavyImpact();
                     },
-                    background: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.secondary,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                      alignment: Alignment.centerRight,
-                      child: Icon(
-                        Icons.delete_rounded,
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        BlocProvider.of<LogRecordBloc>(context).add(
-                          CreateLogRecord(
-                            firebaseLogId: 'Pm3VbYgX6t2XW442sS2E',
-                            firebaseLogTaskId: state.logTasks[index].firebaseLogTaskId,
-                            logRecordDate: "20102024",
-                          ),
-                        );
-                      },
-                      child: LogTaskCard(
-                        logTask: state.logTasks[index],
-                        isCompleted: false,
-                      ),
+                    onLongPress: () {
+                      BlocProvider.of<LogRecordBloc>(context).add(
+                        RemoveTaskFromLogRecord(
+                          firebaseLogId: firebaseLogId,
+                          firebaseLogTaskId:
+                              state.logTasks[index].firebaseLogTaskId,
+                        ),
+                      );
+                      HapticFeedback.vibrate();
+                    },
+                    child: LogTaskCard(
+                      logTask: state.logTasks[index],
+                      isCompleted: false,
                     ),
                   ),
                   itemCount: state.logTasks.length,
