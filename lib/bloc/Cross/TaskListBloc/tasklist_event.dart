@@ -5,9 +5,7 @@ sealed class TaskListEvent extends Equatable {
 }
 
 class LoadTaskListsEvent extends TaskListEvent {
-
-
-  @override 
+  @override
   List<Object?> get props => [];
 }
 
@@ -16,7 +14,7 @@ class CreateNewTaskListEvent extends TaskListEvent {
 
   const CreateNewTaskListEvent({required this.taskListTitle});
 
-  @override 
+  @override
   List<Object?> get props => [taskListTitle];
 }
 
@@ -24,10 +22,26 @@ class UpdateTaskListEvent extends TaskListEvent {
   final String taskListTitle;
   final String taskListFirebaseId;
 
-  const UpdateTaskListEvent({required this.taskListTitle, required this.taskListFirebaseId});
+  const UpdateTaskListEvent({
+    required this.taskListTitle,
+    required this.taskListFirebaseId,
+  });
 
-  @override 
+  @override
   List<Object?> get props => [taskListTitle, taskListFirebaseId];
+}
+
+class ToggleTaskListArchiveStatusEvent extends TaskListEvent {
+  final String taskListFirebaseId;
+  final bool isTaskListArchived;
+
+  const ToggleTaskListArchiveStatusEvent({
+    required this.taskListFirebaseId,
+    required this.isTaskListArchived,
+  });
+
+  @override
+  List<Object?> get props => [taskListFirebaseId, isTaskListArchived];
 }
 
 class DeleteTaskListEvent extends TaskListEvent {
@@ -35,6 +49,6 @@ class DeleteTaskListEvent extends TaskListEvent {
 
   const DeleteTaskListEvent({required this.taskListFirebaseId});
 
-  @override 
+  @override
   List<Object?> get props => [taskListFirebaseId];
 }
