@@ -5,8 +5,10 @@ class CrossTaskEntity {
   final bool isImportant;
   final bool isCompleted;
   final DateTime createdOn;
-  final DateTime? completedOn;
   final String firebaseTaskListId;
+  final DateTime? completedOn;
+  final DateTime? firstAlert;
+  final DateTime? secondAlert;
 
   const CrossTaskEntity({
     required this.firebaseTaskId,
@@ -17,6 +19,8 @@ class CrossTaskEntity {
     required this.createdOn,
     required this.firebaseTaskListId,
     this.completedOn,
+    this.firstAlert,
+    this.secondAlert,
   });
 
   Map<String, Object?> toFirestoreDocument() {
@@ -29,6 +33,8 @@ class CrossTaskEntity {
       'createdOn': createdOn,
       'completedOn': completedOn,
       'taskTitle': taskTitle,
+      'firstAlert': firstAlert,
+      'secondAlert': secondAlert,
     };
   }
 
@@ -41,7 +47,9 @@ class CrossTaskEntity {
       isCompleted: doc['isCompleted'],
       isImportant: doc['isImportant'],
       createdOn: doc['createdOn'].toDate(),
-      completedOn: doc['completedOn'],
+      completedOn: doc['completedOn'].toDate(),
+      firstAlert: doc['firstAlert'].toDate(),
+      secondAlert: doc['secondAlert'].toDate(),
     );
   }
 }

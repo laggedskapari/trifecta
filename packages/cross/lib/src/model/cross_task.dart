@@ -9,6 +9,8 @@ class CrossTask extends Equatable {
   final bool isCompleted;
   final bool isImportant;
   final DateTime createdOn;
+  final DateTime? firstAlert;
+  final DateTime? secondAlert;
   final DateTime? completedOn;
 
   const CrossTask({
@@ -17,9 +19,11 @@ class CrossTask extends Equatable {
     required this.taskTitle,
     required this.createdOn,
     required this.firebaseTaskListId,
-    this.completedOn,
     this.isCompleted = false,
     this.isImportant = false,
+    this.completedOn,
+    this.firstAlert,
+    this.secondAlert,
   });
 
   CrossTaskEntity toCrossTaskEntity() {
@@ -32,6 +36,8 @@ class CrossTask extends Equatable {
       isCompleted: isCompleted,
       isImportant: isImportant,
       completedOn: completedOn,
+      firstAlert: firstAlert,
+      secondAlert: secondAlert,
     );
   }
 
@@ -45,9 +51,12 @@ class CrossTask extends Equatable {
       completedOn: entity.completedOn,
       isCompleted: entity.isCompleted,
       isImportant: entity.isImportant,
+      firstAlert: entity.firstAlert,
+      secondAlert: entity.secondAlert,
     );
   }
 
+  @override
   List<Object?> get props => [
         firebaseTaskListId,
         taskId,
@@ -57,5 +66,7 @@ class CrossTask extends Equatable {
         isImportant,
         isCompleted,
         completedOn,
+        firstAlert,
+        secondAlert,
       ];
 }

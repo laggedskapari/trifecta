@@ -1,9 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cross/src/cross_task_repository.dart';
-import 'package:cross/src/entities/cross_task_entity.dart';
-import 'package:cross/src/model/models.dart';
+import 'package:cross/cross_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
 
@@ -17,14 +15,16 @@ class CrossTaskRepositoryImplementation implements CrossTaskRepository {
 
   @override
   Stream<List<CrossTask>> getAllTasks({required String firebaseTaskListId}) {
+    print("This is called");
     final crossTaskRef = _trifectaUserRef
         .doc(_firebaseAuth.currentUser!.uid)
         .collection('taskLists')
         .doc(firebaseTaskListId)
         .collection('tasks');
-    return crossTaskRef.snapshots().map((tasksSnanpshot) {
-      return tasksSnanpshot.docs.map((doc) {
+    return crossTaskRef.snapshots().map((tasksSnapshot) {
+      return tasksSnapshot.docs.map((doc) {
         Map<String, dynamic> crossTaskData = doc.data();
+        print(crossTaskData);
         return CrossTask.fromCrossTaskEntity(
             CrossTaskEntity.fromFirestoreDocument(crossTaskData));
       }).toList();
@@ -38,6 +38,11 @@ class CrossTaskRepositoryImplementation implements CrossTaskRepository {
   }) async {
     try {
       const uuid = Uuid();
+
+      final taskListRef = _trifectaUserRef
+          .doc(_firebaseAuth.currentUser!.uid)
+          .collection('taskLists')
+          .doc(firebaseTaskListId);
       final newTaskRef = _trifectaUserRef
           .doc(_firebaseAuth.currentUser!.uid)
           .collection('taskLists')
@@ -50,37 +55,26 @@ class CrossTaskRepositoryImplementation implements CrossTaskRepository {
         taskTitle: taskTitle,
         createdOn: DateTime.now(),
         firebaseTaskListId: firebaseTaskListId,
+        firstAlert: DateTime.now(),
+        secondAlert: DateTime.now(),
+        completedOn: DateTime.now(),
       );
-      await newTaskRef.set(newTask.toCrossTaskEntity().toFirestoreDocument());
+
+      await newTaskRef
+          .set(newTask.toCrossTaskEntity().toFirestoreDocument())
+          .then((value) => taskListRef.update({'totalTasks': FieldValue.increment(1)}));
     } catch (e) {
-      log(e.toString());
+      rethrow;
     }
   }
 
   @override
-  Future<void> updateTaskTitle({
+  Future<void> updateTask({
     required String firebaseTaskListId,
     required String firebaseTaskId,
     required String taskTitle,
-  }) async {
-    try {
-      await _trifectaUserRef
-          .doc(_firebaseAuth.currentUser!.uid)
-          .collection('taskLists')
-          .doc(firebaseTaskListId)
-          .collection('tasks')
-          .doc(firebaseTaskId)
-          .update({'taskTitle': taskTitle});
-    } catch (e) {
-      log(e.toString());
-    }
-  }
-
-  @override
-  Future<void> updateTaskCompletion({
-    required String firebaseTaskId,
-    required String firebaseTaskListId,
-    required bool isCompleted,
+    required DateTime? firstAlert,
+    required DateTime? secondAlert,
   }) async {
     try {
       await _trifectaUserRef
@@ -90,10 +84,60 @@ class CrossTaskRepositoryImplementation implements CrossTaskRepository {
           .collection('tasks')
           .doc(firebaseTaskId)
           .update({
-        'isCompleted': isCompleted,
+        'taskTitle': taskTitle,
+        'firstAlert': firstAlert,
+        'secondAlert': secondAlert,
       });
     } catch (e) {
       log(e.toString());
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateTaskCompletion({
+    required String firebaseTaskId,
+    required String firebaseTaskListId,
+    required bool isCompleted,
+  }) async {
+    final taskRef = _trifectaUserRef
+        .doc(_firebaseAuth.currentUser!.uid)
+        .collection('taskLists')
+        .doc(firebaseTaskListId)
+        .collection('tasks')
+        .doc(firebaseTaskId);
+    final taskListRef = _trifectaUserRef
+        .doc(_firebaseAuth.currentUser!.uid)
+        .collection('taskLists')
+        .doc(firebaseTaskListId);
+
+    try {
+      if (isCompleted) {
+        FirebaseFirestore.instance.runTransaction((transac) async {
+          final dataSnapshot = await transac.get(taskListRef);
+          final newTotalCompletedTasks =
+              await dataSnapshot.get("totalCompletedTasks") + 1;
+
+          transac.delete(taskRef);
+          transac.update(taskListRef, {
+            "totalCompletedTasks": newTotalCompletedTasks,
+          });
+        });
+      } else {
+        FirebaseFirestore.instance.runTransaction((transac) async {
+          final dataSnapshot = await transac.get(taskListRef);
+          final newTotalCompletedTasks =
+              await dataSnapshot.get("totalCompletedTasks") - 1;
+
+          transac.delete(taskRef);
+          transac.update(taskListRef, {
+            "totalCompletedTasks": newTotalCompletedTasks,
+          });
+        });
+      }
+    } catch (e) {
+      log(e.toString());
+      rethrow;
     }
   }
 
@@ -115,6 +159,7 @@ class CrossTaskRepositoryImplementation implements CrossTaskRepository {
       });
     } catch (e) {
       log(e.toString());
+      rethrow;
     }
   }
 
@@ -124,15 +169,30 @@ class CrossTaskRepositoryImplementation implements CrossTaskRepository {
     required String firebaseTaskId,
   }) async {
     try {
-      await _trifectaUserRef
+      final taskRef = _trifectaUserRef
           .doc(_firebaseAuth.currentUser!.uid)
           .collection('taskLists')
           .doc(firebaseTaskListId)
           .collection('tasks')
-          .doc(firebaseTaskId)
-          .delete();
+          .doc(firebaseTaskId);
+
+      final taskListRef = _trifectaUserRef
+          .doc(_firebaseAuth.currentUser!.uid)
+          .collection('taskLists')
+          .doc(firebaseTaskListId);
+
+      FirebaseFirestore.instance.runTransaction((transac) async {
+        final dataSnapshot = await transac.get(taskListRef);
+        final newTotalTasks = await dataSnapshot.get("totalTasks") - 1;
+
+        transac.delete(taskRef);
+        transac.update(taskListRef, {
+          "totalTasks": newTotalTasks,
+        });
+      });
     } catch (e) {
       log(e.toString());
+      rethrow;
     }
   }
 }

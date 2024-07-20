@@ -50,7 +50,7 @@ class CrossTasklistRepositoryImplementation implements CrossTaskListRepository {
   }
 
   @override
-  Future<void> updateTaskListTitle({
+  Future<void> updateTaskList({
     required String taskListTitle,
     required String firebaseTaskListId,
   }) async {
@@ -65,10 +65,34 @@ class CrossTasklistRepositoryImplementation implements CrossTaskListRepository {
     }
   }
 
-  @override 
-  Future<void> deleteTaskList({required String firebaseTaskListId,}) async {
+  @override
+  Future<void> updateTaskListArchiveStatus({
+    required String firebaseTaskListId,
+    required bool isTaskListArchived,
+  }) async {
     try {
-      await _trifectaUserReference.doc(_firebaseAuth.currentUser!.uid).collection('taskLists').doc(firebaseTaskListId).delete();
+      await _trifectaUserReference
+          .doc(_firebaseAuth.currentUser!.uid)
+          .collection('taskLists')
+          .doc(firebaseTaskListId)
+          .update({
+        'isTaskListArchived': isTaskListArchived,
+      });
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  @override
+  Future<void> deleteTaskList({
+    required String firebaseTaskListId,
+  }) async {
+    try {
+      await _trifectaUserReference
+          .doc(_firebaseAuth.currentUser!.uid)
+          .collection('taskLists')
+          .doc(firebaseTaskListId)
+          .delete();
     } catch (e) {
       log(e.toString());
     }

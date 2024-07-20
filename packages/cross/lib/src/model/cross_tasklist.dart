@@ -6,12 +6,18 @@ class CrossTaskList extends Equatable {
   final DateTime createdOn;
   final String taskListId;
   final String firebaseTaskListId;
+  final bool isTaskListArchived;
+  final int totalTasks;
+  final int totalCompletedTasks;
 
   const CrossTaskList({
     required this.firebaseTaskListId,
     required this.taskListId,
     required this.taskListTitle,
     required this.createdOn,
+    this.isTaskListArchived = false,
+    this.totalCompletedTasks = 0,
+    this.totalTasks = 0,
   });
 
   CrossTaskListEntity toCrossTaskListEntity() {
@@ -20,6 +26,9 @@ class CrossTaskList extends Equatable {
       firebaseTaskListId: firebaseTaskListId,
       taskListTitle: taskListTitle,
       createdOn: createdOn,
+      isTaskListArchived: isTaskListArchived,
+      totalTasks: totalTasks,
+      totalCompletedTasks: totalCompletedTasks,
     );
   }
 
@@ -29,6 +38,9 @@ class CrossTaskList extends Equatable {
       taskListId: entity.taskListId,
       taskListTitle: entity.taskListTitle,
       createdOn: entity.createdOn,
+      isTaskListArchived: entity.isTaskListArchived,
+      totalTasks: entity.totalTasks,
+      totalCompletedTasks: entity.totalCompletedTasks,
     );
   }
 
@@ -38,5 +50,8 @@ class CrossTaskList extends Equatable {
         firebaseTaskListId,
         taskListId,
         createdOn,
+        isTaskListArchived,
+        totalTasks,
+        totalCompletedTasks,
       ];
 }
