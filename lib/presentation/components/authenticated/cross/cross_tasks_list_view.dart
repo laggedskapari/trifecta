@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:trifecta/bloc/Cross/TaskBloc/task_bloc.dart';
-import 'package:trifecta/presentation/components/authenticated/cross/new_task_form.dart';
+import 'package:trifecta/presentation/components/authenticated/cross/new_task_card.dart';
 import 'package:trifecta/presentation/components/authenticated/cross/task_card.dart';
 import 'package:trifecta/presentation/components/confirm_dialog_box.dart';
 
@@ -40,56 +40,54 @@ class CrossTasksListView extends StatelessWidget {
             );
           }
           if (state.status == TaskStatus.success) {
-            return Column(
+            return ListView(
               children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (context, index) => Dismissible(
-                      key: UniqueKey(),
-                      direction: DismissDirection.endToStart,
-                      confirmDismiss: (val) async {
-                        return await showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  ConfirmDialogBox(
-                                dialogAction: 'DELETE',
-                                dialogTitle: state.crossTasks[index].taskTitle,
-                                onAffirmative: () {
-                                  deleteTask(
-                                    state.crossTasks[index].firebaseTaskId,
-                                    state.firebaseTaskListId,
-                                  );
-                                },
-                                onNegative: () {
-                                  Navigator.pop(context, false);
-                                },
-                              ),
-                            ) ??
-                            false;
-                      },
-                      background: Container(
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .secondary
-                              .withOpacity(.6),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                        alignment: Alignment.centerRight,
-                        child: Icon(
-                          Icons.delete_rounded,
-                          color: Theme.of(context).colorScheme.error,
-                        ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) => Dismissible(
+                    key: UniqueKey(),
+                    direction: DismissDirection.endToStart,
+                    confirmDismiss: (val) async {
+                      return await showDialog(
+                            context: context,
+                            builder: (BuildContext context) => ConfirmDialogBox(
+                              dialogAction: 'DELETE',
+                              dialogTitle: state.crossTasks[index].taskTitle,
+                              onAffirmative: () {
+                                deleteTask(
+                                  state.crossTasks[index].firebaseTaskId,
+                                  state.firebaseTaskListId,
+                                );
+                              },
+                              onNegative: () {
+                                Navigator.pop(context, false);
+                              },
+                            ),
+                          ) ??
+                          false;
+                    },
+                    background: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .secondary
+                            .withOpacity(.6),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      child: TaskCard(
-                        task: state.crossTasks[index],
+                      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                      alignment: Alignment.centerRight,
+                      child: Icon(
+                        Icons.delete_rounded,
+                        color: Theme.of(context).colorScheme.error,
                       ),
                     ),
-                    itemCount: state.crossTasks.length,
+                    child: TaskCard(
+                      task: state.crossTasks[index],
+                    ),
                   ),
+                  itemCount: state.crossTasks.length,
                 ),
-                NewTaskForm(
+                NewTaskCard(
                   firebaseTaskListId: state.firebaseTaskListId,
                 ),
               ],

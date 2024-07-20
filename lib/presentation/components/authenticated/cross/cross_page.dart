@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:trifecta/bloc/Authentication/SignInBloc/sign_in_bloc.dart';
 import 'package:trifecta/presentation/components/authenticated/cross/cross_tasklist_list_view.dart';
 import 'package:trifecta/presentation/components/authenticated/cross/cross_tasks_list_view.dart';
 import 'package:trifecta/presentation/components/authenticated/cross/date_countdown_card.dart';
@@ -13,15 +15,23 @@ class CrossPage extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: deviceWidth * 0.05),
-      child: const Column(
+      child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 30,
             child: CrossTaskListListView(),
           ),
-          DateCountdownCard(),
-          Expanded(
+          const DateCountdownCard(),
+          const Expanded(
             child: CrossTasksListView(),
+          ),
+          TextButton(
+            onPressed: () {
+              BlocProvider.of<SignInBloc>(context).add(
+                const SignOutRequired(),
+              );
+            },
+            child: const Text('SIGNOUT'),
           ),
         ],
       ),
