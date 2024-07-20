@@ -16,9 +16,38 @@ class CrossTaskListListView extends StatefulWidget {
 }
 
 class _CrossTaskListListViewState extends State<CrossTaskListListView> {
+  final taskListTitle = TextEditingController();
   int currentTaskListIndex = -1;
   void changeTaskList({required int taskListIndex}) {
     taskListIndex = currentTaskListIndex;
+  }
+
+  void submitNewTaskList() {
+    setState(() {
+      if (taskListTitle.text.trim().isNotEmpty) {
+        BlocProvider.of<TaskListBloc>(context).add(
+          CreateNewTaskListEvent(
+            taskListTitle: taskListTitle.text.trim(),
+          ),
+        );
+      }
+      Navigator.pop(context);
+    });
+  }
+
+  void onDecline() {
+    Navigator.pop(context);
+  }
+
+  @override
+  void initState() {
+    BlocProvider.of<TaskListBloc>(context).add(LoadTaskListsEvent());
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -42,12 +71,7 @@ class _CrossTaskListListViewState extends State<CrossTaskListListView> {
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
             children: [
-              Container(
-                height: deviceHeight * .10,
-                alignment: Alignment.center,
-                margin: EdgeInsets.symmetric(
-                  horizontal: deviceWidth * .01,
-                ),
+              Expanded(
                 child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
@@ -55,6 +79,16 @@ class _CrossTaskListListViewState extends State<CrossTaskListListView> {
                   itemBuilder: (context, index) => InkWell(
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
+                    onLongPress: () {
+                      setState(() {
+                        BlocProvider.of<TaskListBloc>(context).add(
+                          DeleteTaskListEvent(
+                            taskListFirebaseId:
+                                state.crossTaskLists[index].firebaseTaskListId,
+                          ),
+                        );
+                      });
+                    },
                     onTap: () {
                       setState(() {
                         changeTaskList(taskListIndex: index);
@@ -90,7 +124,14 @@ class _CrossTaskListListViewState extends State<CrossTaskListListView> {
                 onTap: () async {
                   await showDialog(
                     context: context,
-                    builder: (BuildContext context) => const NewTaskListForm(),
+                    builder: (BuildContext context) => Dialog(
+                      insetPadding: EdgeInsets.zero,
+                      child: NewTaskListForm(
+                      taskListTitleController: taskListTitle,
+                      onProceed: submitNewTaskList,
+                      onDecline: onDecline,
+                      ),
+                    ),
                   );
                 },
                 child: Padding(
@@ -98,18 +139,17 @@ class _CrossTaskListListViewState extends State<CrossTaskListListView> {
                   child: Text(
                     '[+]',
                     style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
                       fontSize: 18,
                       fontWeight: FontWeight.w900,
-                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
-              ),
+              )
             ],
           );
         }
         if (state.status == TaskListStatus.failure) {
-          print('Error');
           return Text(
             state.errorMessage!,
             style: Theme.of(context).textTheme.labelSmall,
@@ -118,7 +158,7 @@ class _CrossTaskListListViewState extends State<CrossTaskListListView> {
         return LoadingIndicator(
           indicatorType: Indicator.ballClipRotatePulse,
           colors: [
-            Theme.of(context).colorScheme.primary,
+            Theme.of(context).colorScheme.error,
           ],
           strokeWidth: 10,
         );
