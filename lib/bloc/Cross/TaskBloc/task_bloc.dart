@@ -10,8 +10,7 @@ part 'task_event.dart';
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final CrossTaskRepository crossTaskRepository;
 
-  TaskBloc({required this.crossTaskRepository})
-      : super(const TaskState.initial()) {
+  TaskBloc({required this.crossTaskRepository}) : super(const TaskState.initial()) {
     on<LoadTasksEvent>((event, emit) async {
       try {
         emit(const TaskState.processing());
@@ -20,6 +19,9 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
               firebaseTaskListId: event.firebaseTaskListId,
             )
             .first;
+
+        print("Tasks: ${crossTasks.length.toString()}");
+        print("FirebaseTaskListId: ${event.firebaseTaskListId}");
         emit(TaskState.success(
           crossTasks: crossTasks,
           firebaseTaskListId: event.firebaseTaskListId,
@@ -40,6 +42,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         log(e.toString());
       }
     });
+
     on<UpdateTaskImportanceStatusEvent>((event, emit) async {
       try {
         await crossTaskRepository.updateTaskImportance(
@@ -52,6 +55,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         log(e.toString());
       }
     });
+
     on<UpdateTaskCompletionStatusEvent>((event, emit) async {
       try {
         await crossTaskRepository.updateTaskCompletion(
@@ -64,6 +68,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         log(e.toString());
       }
     });
+
     on<DeleteTaskEvent>((event, emit) async {
       try {
         await crossTaskRepository.deleteTask(
