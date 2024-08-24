@@ -127,9 +127,9 @@ class _CrossTaskListListViewState extends State<CrossTaskListListView> {
                     builder: (BuildContext context) => Dialog(
                       insetPadding: EdgeInsets.zero,
                       child: NewTaskListForm(
-                      taskListTitleController: taskListTitle,
-                      onProceed: submitNewTaskList,
-                      onDecline: onDecline,
+                        taskListTitleController: taskListTitle,
+                        onProceed: submitNewTaskList,
+                        onDecline: onDecline,
                       ),
                     ),
                   );

@@ -29,7 +29,7 @@ class LogRecordBloc extends Bloc<LogRecordEvent, LogRecordState> {
         await logRecordRepository.createNewLogRecord(
           firebaseLogId: event.firebaseLogId,
           firebaseLogTaskId: event.firebaseLogTaskId,
-          logRecordDate: event.logRecordDate,
+          totalLogTasks: event.totalLogTasks,
         );
         add(LoadTodayLogRecord(firebaseLogId: event.firebaseLogId));
       } catch (e) {

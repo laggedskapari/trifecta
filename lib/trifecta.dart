@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:log/logs_repository.dart';
 import 'package:trifecta/bloc/Authentication/SignInBloc/sign_in_bloc.dart';
 import 'package:trifecta/bloc/Authentication/TrifectaAuthenticationBloc/trifecta_authentication_bloc.dart';
+import 'package:trifecta/bloc/Cross/TaskBloc/task_bloc.dart';
 import 'package:trifecta/bloc/Cross/TaskListBloc/tasklist_bloc.dart';
 import 'package:trifecta/bloc/Logs/LogRecordBloc/log_record_bloc.dart';
 import 'package:trifecta/bloc/Logs/LogTaskBloc/log_task_bloc.dart';
@@ -47,6 +48,11 @@ class Trifecta extends StatelessWidget {
         ),
         RepositoryProvider(
           create: (context) => crossTaskListRepository,
+        ),
+        RepositoryProvider(
+          create: (context) => TaskBloc(
+            crossTaskRepository: crossTaskRepository,
+          ),
         ),
         RepositoryProvider(
           create: (context) => crossTaskRepository,

@@ -17,17 +17,17 @@ class LoadTodayLogRecord extends LogRecordEvent {
 
 class CreateLogRecord extends LogRecordEvent {
   final String firebaseLogId;
-  final String logRecordDate;
   final String firebaseLogTaskId;
+  final int totalLogTasks;
 
   const CreateLogRecord({
     required this.firebaseLogId,
     required this.firebaseLogTaskId,
-    required this.logRecordDate,
+    required this.totalLogTasks,
   });
 
   @override 
-  List<Object?> get props => [firebaseLogId, logRecordDate, firebaseLogTaskId];
+  List<Object?> get props => [firebaseLogId, firebaseLogTaskId, totalLogTasks];
 }
 
 class DeleteLogRecord extends LogRecordEvent {

@@ -3,11 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trifecta/bloc/Logs/LogBloc/log_bloc.dart';
 import 'package:trifecta/presentation/components/authenticated/logs/log_tasks_list_view.dart';
 
-class LogInfoCard extends StatelessWidget {
+class LogInfoCard extends StatefulWidget {
   const LogInfoCard({
     super.key,
   });
 
+  @override
+  State<LogInfoCard> createState() => _LogInfoCardState();
+}
+
+class _LogInfoCardState extends State<LogInfoCard> {
   @override
   Widget build(BuildContext context) {
     double deviceHeight = MediaQuery.of(context).size.height;
@@ -33,15 +38,15 @@ class LogInfoCard extends StatelessWidget {
                   ),
                   Text(
                     '//DURATION: ${state.log!.logDuration.toString()}',
-                    style: Theme.of(context).textTheme.labelMedium,
+                    style: Theme.of(context).textTheme.labelSmall,
                   ),
                   Text(
                     '//SUCCESS RATE: ${state.log!.successRate.toString()} %',
-                    style: Theme.of(context).textTheme.labelMedium,
+                    style: Theme.of(context).textTheme.labelSmall,
                   ),
                   Text(
                     '//INIT DATE: ${state.log!.logInitDate.toString()}',
-                    style: Theme.of(context).textTheme.labelMedium,
+                    style: Theme.of(context).textTheme.labelSmall,
                   ),
                   Container(
                     alignment: Alignment.center,
@@ -71,6 +76,7 @@ class LogInfoCard extends StatelessWidget {
                   Expanded(
                     child: LogTasksListView(
                       firebaseLogId: state.log!.firebaseLogId,
+                      totalLogTasks: state.log!.totalLogTasks,
                     ),
                   ),
                 ],

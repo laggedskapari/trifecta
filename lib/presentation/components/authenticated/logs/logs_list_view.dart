@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:log/logs_repository.dart';
 import 'package:trifecta/bloc/Logs/LogBloc/log_bloc.dart';
 import 'package:trifecta/bloc/Logs/LogRecordBloc/log_record_bloc.dart';
 import 'package:trifecta/bloc/Logs/LogTaskBloc/log_task_bloc.dart';
@@ -16,15 +17,47 @@ class LogsListView extends StatefulWidget {
 }
 
 class _LogsListViewState extends State<LogsListView> {
-  String today = DateTime.now().day.toString() +
-      DateTime.now().month.toString() +
-      DateTime.now().year.toString();
+  String today = DateTime.now().day.toString() + DateTime.now().month.toString() + DateTime.now().year.toString();
+
+  final logTitleController = TextEditingController();
+  final logDurationController = TextEditingController();
+  final logTaskTitleController = TextEditingController();
+  List<LogTask> logTasks = [];
 
   int currentLogIndex = -1;
   void changeLogIndex({
     required int logIndex,
   }) {
     currentLogIndex = logIndex;
+  }
+
+  void submitNewLog() {
+    if (logDurationController.text.trim().isNotEmpty &&
+        logTitleController.text.trim().isNotEmpty &&
+        logTasks.isNotEmpty) {
+      BlocProvider.of<LogsBloc>(context).add(
+        CreateNewLogEvent(
+          logTitle: logTitleController.text.trim(),
+          logTasks: logTasks,
+          logDuration: int.parse(logDurationController.text.trim().toString()),
+        ),
+      );
+      HapticFeedback.heavyImpact();
+      Navigator.pop(context);
+    }
+  }
+
+  void deleteLog({
+    required String firebaseLogId,
+  }) {
+    BlocProvider.of<LogsBloc>(context).add(
+      DeleteLogEvent(firebaseLogId: firebaseLogId),
+    );
+    HapticFeedback.vibrate();
+  }
+
+  void onDecline() {
+    Navigator.pop(context);
   }
 
   @override
@@ -58,6 +91,13 @@ class _LogsListViewState extends State<LogsListView> {
                 itemBuilder: (context, index) => InkWell(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
+                  onLongPress: () {
+                    setState(() {
+                      deleteLog(
+                        firebaseLogId: state.logs[index].firebaseLogId,
+                      );
+                    });
+                  },
                   onTap: () {
                     setState(() {
                       changeLogIndex(logIndex: index);
@@ -68,7 +108,7 @@ class _LogsListViewState extends State<LogsListView> {
                       );
                       BlocProvider.of<LogBloc>(context).add(
                         LoadLogEvent(
-                          log: state.logs[index],
+                          firebaseLogId: state.logs[index].firebaseLogId,
                         ),
                       );
                       BlocProvider.of<LogRecordBloc>(context).add(
@@ -86,12 +126,8 @@ class _LogsListViewState extends State<LogsListView> {
                       '[${state.logs[index].logTitle.toUpperCase()}]',
                       style: TextStyle(
                         fontSize: 18,
-                        fontWeight: index == currentLogIndex
-                            ? FontWeight.w900
-                            : FontWeight.normal,
-                        color: index == currentLogIndex
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.secondary,
+                        fontWeight: index == currentLogIndex ? FontWeight.w900 : FontWeight.normal,
+                        color: index == currentLogIndex ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                   ),
@@ -102,7 +138,14 @@ class _LogsListViewState extends State<LogsListView> {
               onTap: () async {
                 await showDialog(
                   context: context,
-                  builder: (context) => const NewLogForm(),
+                  builder: (context) => NewLogForm(
+                    logTitleController: logTitleController,
+                    logTaskTitleController: logTaskTitleController,
+                    logDurationController: logDurationController,
+                    logTasks: logTasks,
+                    onProceed: submitNewLog,
+                    onDecline: onDecline,
+                  ),
                 );
               },
               child: Padding(

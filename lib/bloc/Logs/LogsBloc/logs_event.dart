@@ -5,7 +5,7 @@ sealed class LogsEvent extends Equatable {
 }
 
 class LoadLogsEvent extends LogsEvent {
-  @override 
+  @override
   List<Object?> get props => [];
 }
 
@@ -14,9 +14,13 @@ class CreateNewLogEvent extends LogsEvent {
   final List<LogTask> logTasks;
   final int logDuration;
 
-  const CreateNewLogEvent({required this.logTitle, required this.logTasks, required this.logDuration,});
+  const CreateNewLogEvent({
+    required this.logTitle,
+    required this.logTasks,
+    required this.logDuration,
+  });
 
-  @override 
+  @override
   List<Object?> get props => [logTitle, logTasks, logDuration];
 }
 
@@ -25,6 +29,24 @@ class DeleteLogEvent extends LogsEvent {
 
   const DeleteLogEvent({required this.firebaseLogId});
 
-  @override 
+  @override
+  List<Object?> get props => [firebaseLogId];
+}
+
+class IncreaseLogAttendanceEvent extends LogsEvent {
+  final String firebaseLogId;
+
+  const IncreaseLogAttendanceEvent({required this.firebaseLogId});
+
+  @override
+  List<Object?> get props => [firebaseLogId];
+}
+
+class DecreaseLogAttendanceEvent extends LogsEvent {
+  final String firebaseLogId;
+
+  const DecreaseLogAttendanceEvent({required this.firebaseLogId});
+
+  @override
   List<Object?> get props => [firebaseLogId];
 }

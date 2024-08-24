@@ -5,15 +5,16 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:trifecta/bloc/Logs/LogRecordBloc/log_record_bloc.dart';
 import 'package:trifecta/bloc/Logs/LogTaskBloc/log_task_bloc.dart';
 import 'package:trifecta/presentation/components/authenticated/logs/log_task_card.dart';
-import 'package:trifecta/presentation/components/confirm_dialog_box.dart';
 
 class LogTasksListView extends StatelessWidget {
   const LogTasksListView({
     super.key,
     required this.firebaseLogId,
+    required this.totalLogTasks,
   });
 
   final String firebaseLogId;
+  final int totalLogTasks;
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +26,6 @@ class LogTasksListView extends StatelessWidget {
       ),
       alignment: Alignment.centerLeft,
       child: BlocBuilder<LogTaskBloc, LogTaskState>(builder: (context, state) {
-        if (state.status == LogTaskStatus.processing) {
-          return LoadingIndicator(
-            indicatorType: Indicator.ballClipRotatePulse,
-            colors: [
-              Theme.of(context).colorScheme.primary,
-            ],
-            strokeWidth: 10,
-          );
-        }
         if (state.status == LogTaskStatus.success) {
           return Column(
             children: [
@@ -56,32 +48,12 @@ class LogTasksListView extends StatelessWidget {
               Expanded(
                 child: ListView.builder(
                   itemBuilder: (context, index) => InkWell(
-                    splashColor: Colors.transparent,
-                    splashFactory: NoSplash.splashFactory,
-                    onTap: () {
-                      BlocProvider.of<LogRecordBloc>(context).add(
-                        CreateLogRecord(
-                          firebaseLogId: firebaseLogId,
-                          firebaseLogTaskId:
-                              state.logTasks[index].firebaseLogTaskId,
-                          logRecordDate: "Right Now",
-                        ),
-                      );
-                      HapticFeedback.heavyImpact();
-                    },
-                    onLongPress: () {
-                      BlocProvider.of<LogRecordBloc>(context).add(
-                        RemoveTaskFromLogRecord(
-                          firebaseLogId: firebaseLogId,
-                          firebaseLogTaskId:
-                              state.logTasks[index].firebaseLogTaskId,
-                        ),
-                      );
-                      HapticFeedback.vibrate();
-                    },
+                    key: UniqueKey(),
                     child: LogTaskCard(
+                      firebaseLogId: firebaseLogId,
                       logTask: state.logTasks[index],
                       isCompleted: false,
+                      totalLogTasks: totalLogTasks,
                     ),
                   ),
                   itemCount: state.logTasks.length,

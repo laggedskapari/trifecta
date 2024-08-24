@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:trifecta/bloc/Cross/TaskListBloc/tasklist_bloc.dart';
 import 'package:trifecta/presentation/components/authentication/trifecta_form_text_field.dart';
-import 'package:trifecta/presentation/components/trifecata_proceed_button.dart';
-import 'package:trifecta/presentation/components/trifecta_decline_button.dart';
 
 class NewTaskListForm extends StatefulWidget {
   const NewTaskListForm({
@@ -23,15 +18,6 @@ class NewTaskListForm extends StatefulWidget {
 }
 
 class _NewTaskListFormState extends State<NewTaskListForm> {
-  final _titleController = TextEditingController();
-
-  
-  void onDecline() {
-    _titleController.dispose();
-    Navigator.pop(context);
-    HapticFeedback.vibrate();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(

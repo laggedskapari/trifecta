@@ -2,7 +2,6 @@ import 'package:cross/cross_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:log/logs_repository.dart';
-import 'package:trifecta/bloc/Authentication/SignInBloc/sign_in_bloc.dart';
 import 'package:trifecta/bloc/Cross/TaskBloc/task_bloc.dart';
 import 'package:trifecta/bloc/Cross/TaskListBloc/tasklist_bloc.dart';
 import 'package:trifecta/bloc/Logs/LogBloc/log_bloc.dart';
@@ -10,9 +9,8 @@ import 'package:trifecta/bloc/Logs/LogRecordBloc/log_record_bloc.dart';
 import 'package:trifecta/bloc/Logs/LogTaskBloc/log_task_bloc.dart';
 import 'package:trifecta/bloc/Logs/LogsBloc/logs_bloc.dart';
 import 'package:trifecta/presentation/components/authenticated/cross/cross_page.dart';
-import 'package:trifecta/presentation/components/authenticated/logs/log_info_card.dart';
+import 'package:trifecta/presentation/components/authenticated/focus/focus_page.dart';
 import 'package:trifecta/presentation/components/authenticated/logs/logs_page.dart';
-import 'package:trifecta/presentation/components/authenticated/logs/new_log_form.dart';
 import 'package:trifecta/presentation/components/authenticated/trifecta_navigation_bar.dart';
 import 'package:trifecta/presentation/components/trifecta_app_bar.dart';
 
@@ -55,7 +53,9 @@ class _AuthenticatedScreenState extends State<AuthenticatedScreen> {
                     RepositoryProvider.of<LogsTaskRepository>(context)),
           ),
           BlocProvider(
-            create: (context) => LogBloc(),
+            create: (context) => LogBloc(
+                logsLogRepository:
+                    RepositoryProvider.of<LogsLogRepository>(context)),
           ),
           BlocProvider(
             create: (context) => LogRecordBloc(
@@ -63,7 +63,7 @@ class _AuthenticatedScreenState extends State<AuthenticatedScreen> {
                     RepositoryProvider.of<LogRecordRepository>(context)),
           ),
         ],
-        child: const LogsPage(),
+        child: const FocusPage(),
       ),
       bottomNavigationBar: TrifectaNavigationBar(
         changeScreen: changeScreen,

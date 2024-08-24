@@ -5,10 +5,10 @@ sealed class LogEvent extends Equatable {
 }
 
 class LoadLogEvent extends LogEvent {
-  final LogsLog log;
+  final String firebaseLogId;
 
-  const LoadLogEvent({required this.log});
+  const LoadLogEvent({required this.firebaseLogId});
 
   @override
-  List<Object?> get props => [log];
+  List<Object?> get props => [firebaseLogId];
 }

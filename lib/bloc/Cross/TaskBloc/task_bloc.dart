@@ -10,22 +10,20 @@ part 'task_event.dart';
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final CrossTaskRepository crossTaskRepository;
 
-  TaskBloc({required this.crossTaskRepository}) : super(const TaskState.initial()) {
+  TaskBloc({required this.crossTaskRepository})
+      : super(const TaskState.initial()) {
     on<LoadTasksEvent>((event, emit) async {
       try {
         emit(const TaskState.processing());
         final crossTasks = await crossTaskRepository
-            .getAllTasks(
-              firebaseTaskListId: event.firebaseTaskListId,
-            )
+            .getAllTasks(firebaseTaskListId: event.firebaseTaskListId)
             .first;
-
-        print("Tasks: ${crossTasks.length.toString()}");
-        print("FirebaseTaskListId: ${event.firebaseTaskListId}");
-        emit(TaskState.success(
-          crossTasks: crossTasks,
-          firebaseTaskListId: event.firebaseTaskListId,
-        ));
+        emit(
+          TaskState.success(
+            crossTasks: crossTasks,
+            firebaseTaskListId: event.firebaseTaskListId,
+          ),
+        );
       } catch (e) {
         emit(TaskState.failure(errorMessage: e.toString()));
       }

@@ -70,7 +70,7 @@ class TaskCard extends StatelessWidget {
                     ? Theme.of(context).colorScheme.secondary
                     : (task.isImportant)
                         ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.primary.withOpacity(.7),
+                        : Theme.of(context).colorScheme.primary.withOpacity(.9),
                 size: 20,
               ),
             ),
@@ -120,7 +120,7 @@ class TaskCard extends StatelessWidget {
                           : Theme.of(context)
                               .colorScheme
                               .primary
-                              .withOpacity(.7),
+                              .withOpacity(.9),
                   decoration: (task.isCompleted)
                       ? TextDecoration.lineThrough
                       : TextDecoration.none,
