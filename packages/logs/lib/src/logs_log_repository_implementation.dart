@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,8 +8,7 @@ import 'package:uuid/uuid.dart';
 
 class LogsLogRepositoryImplementation implements LogsLogRepository {
   final FirebaseAuth _firebaseAuth;
-  final CollectionReference _trifectaUserReference =
-      FirebaseFirestore.instance.collection('trifectaUsers');
+  final CollectionReference _trifectaUserReference = FirebaseFirestore.instance.collection('trifectaUsers');
   final _trifectaFirestore = FirebaseFirestore.instance;
 
   LogsLogRepositoryImplementation({FirebaseAuth? firebaseAuth})
@@ -29,12 +29,26 @@ class LogsLogRepositoryImplementation implements LogsLogRepository {
   }
 
   @override
+  Future<LogsLog> getLog({
+    required String firebaseLogId,
+  }) async {
+    final logRef = _trifectaUserReference
+        .doc(_firebaseAuth.currentUser!.uid)
+        .collection('logs')
+        .doc(firebaseLogId);
+    final logData = await logRef.get();
+    return LogsLog.fromLogsLogEntity(
+      LogsLogEntity.fromFirestoreDocument(logData.data()!),
+    );
+  }
+
+  @override
   Future<void> createNewLogsLog({
     required String logTitle,
     required int logDuration,
     required List<LogTask> logTasks,
   }) async {
-    if (logDuration < 366 && logTasks.length < 6) {
+    if (logDuration < 366 && logTasks.isNotEmpty) {
       try {
         const uuid = Uuid();
         final today = DateTime.now();
@@ -56,6 +70,7 @@ class LogsLogRepositoryImplementation implements LogsLogRepository {
           logCreatedOn: today,
           logDuration: logDuration,
           logInitDate: today,
+          totalLogTasks: logTasks.length,
         );
         await newLogsLogRef.set(newLog.toLogsLogEntity().toFirestoreDocument());
 
@@ -64,8 +79,9 @@ class LogsLogRepositoryImplementation implements LogsLogRepository {
         log(e.toString());
         throw e.toString();
       }
+    } else {
+      throw 'Log tasks or log duration exceeded the limit.';
     }
-    throw 'Log tasks or log duration exceeded the limit.';
   }
 
   void createLogTasks({
@@ -77,8 +93,9 @@ class LogsLogRepositoryImplementation implements LogsLogRepository {
       for (var logTask in logTasks) {
         final newLogTaskRef = newLogsLogRef.collection('logTasks').doc();
         final newLogTask = LogTask(
-            logTaskTitle: logTask.logTaskTitle,
-            firebaseLogTaskId: newLogTaskRef.id);
+          logTaskTitle: logTask.logTaskTitle,
+          firebaseLogTaskId: newLogTaskRef.id,
+        );
         logTasksBatch.set(
           newLogTaskRef,
           newLogTask.toLogTaskEntity().toFirestoreDocument(),
@@ -140,6 +157,36 @@ class LogsLogRepositoryImplementation implements LogsLogRepository {
       });
     } catch (e) {
       log(e.toString());
+      throw e.toString();
+    }
+  }
+
+  @override
+  Future<void> increaseLogAttendance({
+    required String firebaseLogId,
+  }) async {
+    try {
+      await _trifectaUserReference
+          .doc(_firebaseAuth.currentUser!.uid)
+          .collection('logs')
+          .doc(firebaseLogId)
+          .update({'logAttendance': FieldValue.increment(1)});
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  @override
+  Future<void> decreaseLogAttendance({
+    required String firebaseLogId,
+  }) async {
+    try {
+      await _trifectaUserReference
+          .doc(_firebaseAuth.currentUser!.uid)
+          .collection('logs')
+          .doc(firebaseLogId)
+          .update({'logAttendance': FieldValue.increment(-1)});
+    } catch (e) {
       throw e.toString();
     }
   }

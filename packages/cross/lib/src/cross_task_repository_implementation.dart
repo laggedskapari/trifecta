@@ -15,7 +15,6 @@ class CrossTaskRepositoryImplementation implements CrossTaskRepository {
 
   @override
   Stream<List<CrossTask>> getAllTasks({required String firebaseTaskListId}) {
-    print("This is called");
     final crossTaskRef = _trifectaUserRef
         .doc(_firebaseAuth.currentUser!.uid)
         .collection('taskLists')
@@ -24,7 +23,6 @@ class CrossTaskRepositoryImplementation implements CrossTaskRepository {
     return crossTaskRef.snapshots().map((tasksSnapshot) {
       return tasksSnapshot.docs.map((doc) {
         Map<String, dynamic> crossTaskData = doc.data();
-        print(crossTaskData);
         return CrossTask.fromCrossTaskEntity(
             CrossTaskEntity.fromFirestoreDocument(crossTaskData));
       }).toList();
@@ -62,7 +60,8 @@ class CrossTaskRepositoryImplementation implements CrossTaskRepository {
 
       await newTaskRef
           .set(newTask.toCrossTaskEntity().toFirestoreDocument())
-          .then((value) => taskListRef.update({'totalTasks': FieldValue.increment(1)}));
+          .then((value) =>
+              taskListRef.update({'totalTasks': FieldValue.increment(1)}));
     } catch (e) {
       rethrow;
     }
@@ -113,27 +112,11 @@ class CrossTaskRepositoryImplementation implements CrossTaskRepository {
 
     try {
       if (isCompleted) {
-        FirebaseFirestore.instance.runTransaction((transac) async {
-          final dataSnapshot = await transac.get(taskListRef);
-          final newTotalCompletedTasks =
-              await dataSnapshot.get("totalCompletedTasks") + 1;
-
-          transac.delete(taskRef);
-          transac.update(taskListRef, {
-            "totalCompletedTasks": newTotalCompletedTasks,
-          });
-        });
+        await taskRef.update({'isCompleted': true}).then((val) => taskListRef
+            .update({'totalCompletedTasks': FieldValue.increment(1)}));
       } else {
-        FirebaseFirestore.instance.runTransaction((transac) async {
-          final dataSnapshot = await transac.get(taskListRef);
-          final newTotalCompletedTasks =
-              await dataSnapshot.get("totalCompletedTasks") - 1;
-
-          transac.delete(taskRef);
-          transac.update(taskListRef, {
-            "totalCompletedTasks": newTotalCompletedTasks,
-          });
-        });
+        await taskRef.update({'isCompleted': false}).then((val) => taskListRef
+            .update({'totalCompletedTasks': FieldValue.increment(-1)}));
       }
     } catch (e) {
       log(e.toString());
@@ -181,15 +164,10 @@ class CrossTaskRepositoryImplementation implements CrossTaskRepository {
           .collection('taskLists')
           .doc(firebaseTaskListId);
 
-      FirebaseFirestore.instance.runTransaction((transac) async {
-        final dataSnapshot = await transac.get(taskListRef);
-        final newTotalTasks = await dataSnapshot.get("totalTasks") - 1;
-
-        transac.delete(taskRef);
-        transac.update(taskListRef, {
-          "totalTasks": newTotalTasks,
-        });
-      });
+      await taskRef
+          .delete()
+          .then((value) =>
+              taskListRef.update({'totalTasks': FieldValue.increment(-1)}));
     } catch (e) {
       log(e.toString());
       rethrow;

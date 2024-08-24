@@ -10,6 +10,7 @@ class LogsLogEntity {
   final DateTime logCompletedOn;
   final DateTime logInitDate;
   final int logAttendance;
+  final int totalLogTasks;
 
   const LogsLogEntity({
     required this.logCompletedOn,
@@ -23,6 +24,7 @@ class LogsLogEntity {
     required this.successRate,
     required this.logInitDate,
     required this.logAttendance,
+    required this.totalLogTasks,
   });
 
   Map<String, Object?> toFirestoreDocument() {
@@ -38,6 +40,7 @@ class LogsLogEntity {
       'logCompletedOn': logCompletedOn, 
       'logInitDate': logInitDate,
       'logAttendance': logAttendance,
+      'totalLogTasks': totalLogTasks,
     };
   }
 
@@ -54,6 +57,7 @@ class LogsLogEntity {
       logDuration: doc['logDuration'],
       successRate: doc['successRate'],
       logAttendance: doc['logAttendance'],
+      totalLogTasks: doc['totalLogTasks'],
     );
   }
 }

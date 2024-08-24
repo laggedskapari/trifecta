@@ -12,7 +12,7 @@ abstract class LogRecordRepository {
   Future<void> createNewLogRecord({
     required String firebaseLogId,
     required String firebaseLogTaskId,
-    required String logRecordDate,
+    required int totalLogTasks,
   });
 
   Future<void> deleteLogRecord({

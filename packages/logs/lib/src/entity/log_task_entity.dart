@@ -1,6 +1,6 @@
 class LogTaskEntity {
-  final logTaskTitle;
-  final firebaseLogTaskId;
+  final String logTaskTitle;
+  final String firebaseLogTaskId;
 
   const LogTaskEntity({
     required this.firebaseLogTaskId,

@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:log/src/entity/entities.dart';
 import 'package:log/src/log_record_repository.dart';
 import 'package:log/src/model/models.dart';
@@ -31,6 +30,8 @@ class LogRecordRepositoryImplementation implements LogRecordRepository {
     });
   }
 
+  
+
   @override
   Future<LogRecord> getTodayLogRecord({required String firebaseLogId}) {
     final today = DateTime.now().day.toString() +
@@ -52,7 +53,7 @@ class LogRecordRepositoryImplementation implements LogRecordRepository {
   Future<void> createNewLogRecord({
     required String firebaseLogId,
     required String firebaseLogTaskId,
-    required String logRecordDate,
+    required int totalLogTasks,
   }) async {
     try {
       final String today = DateTime.now().day.toString() +
@@ -67,18 +68,24 @@ class LogRecordRepositoryImplementation implements LogRecordRepository {
       final recordData = await newLogTaskRecordRef.get();
       if (recordData.exists) {
         newLogTaskRecordRef.update({
-          "logRecordTasks": FieldValue.arrayUnion([firebaseLogTaskId])
+          "logRecordTasks": FieldValue.arrayUnion([firebaseLogTaskId]),
+          'totalCompletedLogTasks': FieldValue.increment(1),
         });
         return;
       }
       final newLogTaskRecord = LogRecord(
-        logRecordDate: DateTime.now(),
-        logRecordTasks: [firebaseLogTaskId],
-      );
+          logRecordDate: DateTime.now(),
+          logRecordTasks: [firebaseLogTaskId],
+          isCompleted: false,
+          totalLogTasks: totalLogTasks,
+          totalCompletedLogTasks: 1);
 
       await newLogTaskRecordRef.set(
-          newLogTaskRecord.toLogRecordEntity().toFirebaseDocument(),
-          SetOptions(merge: true));
+        newLogTaskRecord.toLogRecordEntity().toFirebaseDocument(),
+        SetOptions(
+          merge: true,
+        ),
+      );
     } catch (e) {
       log(e.toString());
     }
@@ -120,7 +127,8 @@ class LogRecordRepositoryImplementation implements LogRecordRepository {
       final recordData = await logTaskRecordRef.get();
       if (recordData.exists) {
         logTaskRecordRef.update({
-          "logRecordTasks": FieldValue.arrayRemove([firebaseLogTaskId])
+          "logRecordTasks": FieldValue.arrayRemove([firebaseLogTaskId]),
+          'totalCompletedLogTasks': FieldValue.increment(-1),
         });
         return;
       }
